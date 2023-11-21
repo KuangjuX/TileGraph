@@ -37,6 +37,7 @@ enum class OperatorType {
   SIN,
   COS,
   TANH,
+  GELU,
   // Memory
   LOAD,
   ALLOCATE,
@@ -45,7 +46,8 @@ enum class OperatorType {
   // Sync
   SYNC,
   // GEMM
-  GEMM
+  GEMM,
+  SOFTMAX,
 };
 // KernelType
 enum class KernelType { BINARY, UNARY, REDUCE, BROADCAST, MEMORY, FMA, SYNC };

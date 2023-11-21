@@ -1,0 +1,22 @@
+{
+    "configurations": [
+        {
+            "name": "Linux",
+            "includePath": [
+                "${workspaceFolder}/include",
+                "${workspaceFolder}/3rd-party/cutlass/include",
+                "${workspaceFolder}/3rd-party/cutlass/tools/util/include",
+                "${workspaceFolder}/3rd-party/cutlass/examples/common",
+                "${workspaceFolder}/3rd-party/fmt/include",
+                "${workspaceFolder}/3rd-party/googletest/googletest/include",
+                "${workspaceFolder}/3rd-party/googletest/googlemock/include",
+            ],
+            "version": 4,
+            "intelliSenseMode": "linux-gcc-x64",
+            "compilerPath": "/usr/bin/gcc",
+            "cStandard": "c17",
+            "cppStandard": "gnu++17"
+        }
+    ],
+    "version": 4
+}
