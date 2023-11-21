@@ -34,7 +34,13 @@ add_compile_options(-Wall)
 enable_testing()
 
 
-file(GLOB_RECURSE SOURCE src/core/*.pp src/core/graph/*.cpp src/operators/*.cpp)
+file(GLOB_RECURSE SOURCE 
+  src/core/*.pp 
+  src/core/graph/*.cpp 
+  src/operators/*.cpp 
+  src/engine/fusion/*.cpp
+)
+
 add_library(tilegraph SHARED ${SOURCE})
 
 add_compile_options(-Wall)
@@ -56,4 +62,5 @@ endfunction()
 
 if(BUILD_TEST)
     build_test(tests/graph/*.cpp)
+    build_test(tests/fusion/*.cpp)
 endif()

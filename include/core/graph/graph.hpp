@@ -55,14 +55,14 @@ namespace tilegraph {
         TensorDatatype tensor_datatype;
         TensorType tensor_type;
         //   TensorLayout tensor_layout;
-        //   std::vector<int64_t> tensor_dimension;
+        std::vector<int64_t> tensor_dimension;
         //   std::vector<int64_t> tensor_stride;
         //   int64_t data_offset;
         //   bool is_contiguous;
 
        public:
         Data() = delete;
-        Data(std::string name_value = "",
+        Data(const std::vector<int64_t> &dimension, std::string name_value = "",
              TensorDatatype dtype = TensorDatatype::FLOAT,
              TensorType type = TensorType::VARIABLE);
         //   Data(const std::vector<int64_t> &dimension,

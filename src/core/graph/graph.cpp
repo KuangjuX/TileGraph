@@ -21,7 +21,8 @@ namespace tilegraph {
         if (outputs.empty()) {
             Data* temp;
             for (auto i = 0; i < outputs_num; ++i) {
-                temp = new Data(inputs[0]->name, inputs[0]->tensor_datatype,
+                temp = new Data(inputs[0]->tensor_dimension, inputs[0]->name,
+                                inputs[0]->tensor_datatype,
                                 inputs[0]->tensor_type);
                 outputs.push_back(temp);
             }
@@ -48,8 +49,10 @@ namespace tilegraph {
 
     OperatorType Node::getOperatorType() { return operator_type; }
 
-    Data::Data(std::string name_value, TensorDatatype dtype, TensorType type)
-        : tensor_datatype(dtype),
+    Data::Data(const std::vector<int64_t>& dimension, std::string name_value,
+               TensorDatatype dtype, TensorType type)
+        : tensor_dimension(dimension),
+          tensor_datatype(dtype),
           tensor_type(type),
           name(name_value),
           index(count++),
