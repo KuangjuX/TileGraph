@@ -5,3 +5,5 @@ Language: Cpp
 PointerAlignment: Right
 SortIncludes: false
 ColumnLimit: 80
+NamespaceIndentation: All
+IndentWidth: 4
