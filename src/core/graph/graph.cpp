@@ -1,6 +1,8 @@
-#include "core/graph/graph.hpp"
 #include <algorithm>
 #include <fmt/core.h>
+
+#include "core/graph/graph.hpp"
+#include "core/graph/subgraph.hpp"
 
 namespace tilegraph {
 
@@ -41,6 +43,43 @@ namespace tilegraph {
         for (auto it : inputs) {
             indegree += it->producer == NULL ? 0 : 1;
         }
+    }
+
+    Node::Node(std::vector<Data*> inputs_list, std::vector<Data*> outputs_list,
+               std::shared_ptr<SubGraph> subgraph, std::string name_value,
+               int64_t outputs_num_value)
+        : name(name_value),
+          index(count++),
+          indegree(0),
+          outputs_num(outputs_num_value),
+          inputs(inputs_list),
+          outputs(outputs_list),
+          subgraph(subgraph) {
+        name = (name == "" ? "Operator_" + std::to_string(index) : name);
+        if (outputs.empty()) {
+            Data* temp;
+            for (auto i = 0; i < outputs_num; ++i) {
+                temp = new Data(inputs[0]->tensor_dimension, inputs[0]->name,
+                                inputs[0]->tensor_datatype,
+                                inputs[0]->tensor_type);
+                outputs.push_back(temp);
+            }
+        }
+        for (auto it : inputs) {
+            it->addConsumer(this);
+            it->remaining += 1;
+            if (it->producer != NULL) {
+                predecessors.push_back(it->producer);
+                it->producer->successors.push_back(this);
+            }
+        }
+        for (auto it : outputs) {
+            it->setProducer(this);
+        }
+        for (auto it : inputs) {
+            indegree += it->producer == NULL ? 0 : 1;
+        }
+        this->operator_type = OperatorType::SUBGRAPH;
     }
 
     Data* Node::getOutput(int64_t index) { return outputs[index]; }
@@ -139,5 +178,17 @@ namespace tilegraph {
         //   }
         fmt::print("Graph Name: {}\n", name);
     }
+
+    bool Graph::removeNode(int64_t node_index) {
+        for (auto it = operators.begin(); it != operators.end(); ++it) {
+            if ((*it)->index == node_index) {
+                operators.erase(it);
+                return true;
+            }
+        }
+        return false;
+    }
+
+    void Graph::addNode(Node* node) { this->operators.push_back(node); }
 
 }  // namespace tilegraph

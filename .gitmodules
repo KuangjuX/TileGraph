@@ -10,3 +10,6 @@
 [submodule "3rd-party/fmt"]
 	path = 3rd-party/fmt
 	url = git@github.com:fmtlib/fmt.git
+[submodule "3rd-party/result"]
+	path = 3rd-party/result
+	url = git@github.com:oktal/result.git

@@ -6,10 +6,12 @@
 
 #include "core/type.hpp"
 #include "core/platform.hpp"
+#include "core/graph/subgraph.hpp"
 
 namespace tilegraph {
 
     class Data;
+    class SubGraph;
 
     class Node {
        private:
@@ -26,10 +28,15 @@ namespace tilegraph {
         std::vector<Node *> successors;
         //   std::unordered_map<std::string, Attribute> attributes;
         OperatorType operator_type;
+        std::shared_ptr<SubGraph> subgraph;
 
        public:
         Node(std::vector<Data *> inputs_list = {},
              std::vector<Data *> outputs_list = {}, std::string name_value = "",
+             int64_t outputs_num_value = 1);
+        Node(std::vector<Data *> inputs_list = {},
+             std::vector<Data *> outputs_list = {},
+             std::shared_ptr<SubGraph> = nullptr, std::string name_value = "",
              int64_t outputs_num_value = 1);
         ~Node() = default;
         Data *getOutput(int64_t index);
@@ -118,6 +125,8 @@ namespace tilegraph {
         //   virtual std::string generatorSourceFile(int64_t indent = 0) = 0;
         //   virtual void applyPlatform(Platform platform) = 0;
         void printGraph();
+        bool removeNode(int64_t index);
+        void addNode(Node *node);
     };
 
 }  // namespace tilegraph

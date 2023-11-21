@@ -10,7 +10,7 @@
 using namespace tilegraph;
 using namespace tilegraph::fusion;
 
-TEST(Fusion, gemm) {
+TEST(Fusion, gemm_relu) {
     Data* a = new Data({5120, 5120});
     Data* b = new Data({5120, 5120});
     Node* gemm = new Gemm({a, b});
@@ -23,4 +23,12 @@ TEST(Fusion, gemm) {
 
     auto gemm_fusion = std::make_shared<GemmFusion>();
     gemm_fusion->fusion(graph_ptr);
+
+    EXPECT_EQ(graph_ptr->operators.size(), 1);
+    EXPECT_EQ(graph_ptr->operators[0]->getOperatorType(),
+              OperatorType::SUBGRAPH);
+
+    auto ordered_ops = graph_ptr->topoSort();
+    EXPECT_EQ(ordered_ops.size(), 1);
+    EXPECT_EQ(ordered_ops[0]->getOperatorType(), OperatorType::SUBGRAPH);
 }

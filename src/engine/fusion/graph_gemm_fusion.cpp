@@ -1,5 +1,7 @@
 #include "engine/fusion/graph_gemm_fusion.hpp"
 
+#include <fmtlog.h>
+
 namespace tilegraph {
     namespace fusion {
 
@@ -23,10 +25,33 @@ namespace tilegraph {
 
             for (auto node : nodes) {
                 if (node->getOperatorType() == OperatorType::GEMM) {
-                                }
+                    auto successor_nodes = node->successors;
+                    if (successor_nodes.size() == 1) {
+                        auto successor_node = successor_nodes[0];
+                        if (successor_node->getOperatorType() ==
+                            OperatorType::RELU) {
+                            // create subgraph
+                            auto subgraph = std::make_shared<SubGraph>(
+                                SubGraph({node, successor_node}));
+                            // crate fused node
+                            Node* fused_node =
+                                new Node(node->inputs, successor_node->outputs,
+                                         subgraph);
+                            // remove original nodes
+                            if (graph->removeNode(node->index) &&
+                                graph->removeNode(successor_node->index)) {
+                                // add fused node
+                                graph->addNode(fused_node);
+                            } else {
+                                FMTLOG(fmtlog::ERR, "Failed to remove nodes");
+                            }
+                        }
+                    }
+                }
             }
 
             return true;
         }
+
     }  // namespace fusion
 }  // namespace tilegraph

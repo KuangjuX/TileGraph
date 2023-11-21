@@ -21,8 +21,9 @@ if(BUILD_ASAN)
 endif()
 
 include_directories(include)
-include_directories(tests)
 include_directories(3rd-party/fmt/include)
+include_directories(3rd-party/fmtlog)
+add_definitions(-D FMTLOG_HEADER_ONLY)
 
 if(BUILD_TEST)
     include_directories(3rd-party/googletest/googletest/include)
@@ -35,7 +36,7 @@ enable_testing()
 
 
 file(GLOB_RECURSE SOURCE 
-  src/core/*.pp 
+  src/core/*.cpp 
   src/core/graph/*.cpp 
   src/operators/*.cpp 
   src/engine/fusion/*.cpp

@@ -1,5 +1,6 @@
 #pragma once
 #include "engine/fusion/graph_fusion_base.hpp"
+#include "core/graph/subgraph.hpp"
 
 namespace tilegraph {
     namespace fusion {
