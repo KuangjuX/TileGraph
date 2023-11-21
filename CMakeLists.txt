@@ -23,32 +23,37 @@ endif()
 include_directories(include)
 include_directories(tests)
 include_directories(3rd-party/fmt/include)
-# add_subdirectory(3rd-party/fmt)
-# add_subdirectory(3rd-party/fmtlog)
-# add_subdirectory(3rd-party/googletest)
+
+if(BUILD_TEST)
+    include_directories(3rd-party/googletest/googletest/include)
+    add_subdirectory(3rd-party/googletest)
+endif()
 
 add_compile_options(-Wall)
 
 enable_testing()
 
-# add_subdirectory(src/core)
-# add_subdirectory(src/operators)
 
-file(GLOB_RECURSE SOURCE src/core/*.pp src/core/graph/*.cpp src/operator/*.cpp)
+file(GLOB_RECURSE SOURCE src/core/*.pp src/core/graph/*.cpp src/operators/*.cpp)
 add_library(tilegraph SHARED ${SOURCE})
 
-# add_compile_options(-Wall)
+add_compile_options(-Wall)
 # add_compile_options(-Werror)
 
 target_link_directories(tilegraph PRIVATE 3rd-party/fmt/build)
 target_link_libraries(tilegraph PRIVATE fmt)
 
-# if(BUILD_TEST)
-#   file(GLOB_RECURSE TEST tests/*.cpp)
-#   foreach(file ${TEST})
-#     get_filename_component(filename ${file} NAME_WE)
-#     add_executable(${filename} ${file})
-#     target_link_libraries(${filename} Thread)
-#     add_test(NAME ${filename} COMMAND ${filename})
-#   endforeach()
-# endif()
+function(build_test files)
+  # Non-recursive glob for skip failed tests
+  file(GLOB TEST_SOURCES ${files})
+  foreach(testsourcefile ${TEST_SOURCES})
+    get_filename_component(testname ${testsourcefile} NAME_WE)
+    add_executable(${testname} ${testsourcefile})
+    target_link_libraries(${testname} tilegraph GTest::gtest_main)
+    add_test(NAME ${testname} COMMAND ${testname})
+  endforeach(testsourcefile ${TEST_SOURCES})
+endfunction()
+
+if(BUILD_TEST)
+    build_test(tests/graph/*.cpp)
+endif()
