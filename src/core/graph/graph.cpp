@@ -58,29 +58,29 @@ namespace tilegraph::graph {
           outputs(outputs_list),
           subgraph(subgraph) {
         name = (name == "" ? "Operator_" + std::to_string(index) : name);
-        if (outputs.empty()) {
-            Data* temp;
-            for (auto i = 0; i < outputs_num; ++i) {
-                temp = new Data(inputs[0]->tensor_dimension, inputs[0]->name,
-                                inputs[0]->tensor_datatype,
-                                inputs[0]->tensor_type);
-                outputs.push_back(temp);
-            }
-        }
-        for (auto it : inputs) {
-            it->addConsumer(this);
-            it->remaining += 1;
-            if (it->producer != NULL) {
-                predecessors.push_back(it->producer);
-                it->producer->successors.push_back(this);
-            }
-        }
-        for (auto it : outputs) {
-            it->setProducer(this);
-        }
-        for (auto it : inputs) {
-            indegree += it->producer == NULL ? 0 : 1;
-        }
+        // if (outputs.empty()) {
+        //     Data* temp;
+        //     for (auto i = 0; i < outputs_num; ++i) {
+        //         temp = new Data(inputs[0]->tensor_dimension, inputs[0]->name,
+        //                         inputs[0]->tensor_datatype,
+        //                         inputs[0]->tensor_type);
+        //         outputs.push_back(temp);
+        //     }
+        // }
+        // for (auto it : inputs) {
+        //     it->addConsumer(this);
+        //     it->remaining += 1;
+        //     if (it->producer != NULL) {
+        //         predecessors.push_back(it->producer);
+        //         it->producer->successors.push_back(this);
+        //     }
+        // }
+        // for (auto it : outputs) {
+        //     it->setProducer(this);
+        // }
+        // for (auto it : inputs) {
+        //     indegree += it->producer == NULL ? 0 : 1;
+        // }
         this->operator_type = OperatorType::SUBGRAPH;
     }
 
@@ -188,27 +188,49 @@ namespace tilegraph::graph {
         auto subgraph_input_tensors = subgraph_node->inputs;
         auto subgraph_output_tensors = subgraph_node->outputs;
 
+        // Clear subgraph node indgree, predecessors and successors
+        subgraph_node->indegree = 0;
+        subgraph_node->predecessors.clear();
+        subgraph_node->successors.clear();
+
+        // Update input and output tensors.
         for (auto tensor : subgraph_input_tensors) {
-            tensor->consumers = {};
-            tensor->addConsumer(subgraph_node);
-        }
+            // Remove old nodes from consumers
+            auto consumers = tensor->consumers;
+            auto consumers_iter =
+                std::find(consumers.begin(), consumers.end(), old_nodes[0]);
+            if (consumers_iter != consumers.end()) {
+                consumers.erase(consumers_iter);
+                tensor->remaining -= 1;
+            }
+            // Add subgraph_node to consumers
+            tensor->consumers.push_back(subgraph_node);
+            tensor->remaining += 1;
+            if (tensor->producer != NULL) {
+                // subgraph_node->predecessors->push_back(tensor->producer);
+                subgraph_node->predecessors.push_back(tensor->producer);
+                tensor->producer->successors.push_back(subgraph_node);
+            }
 
-        for (auto tensor : subgraph_output_tensors) {
-            tensor->producer = {};
-            tensor->setProducer(subgraph_node);
-        }
-
-        // Remove old nodes
-        for (auto node : old_nodes) {
-            auto node_iter =
-                std::find(operators.begin(), operators.end(), node);
-            if (node_iter != operators.end()) {
-                operators.erase(node_iter);
+            for (auto tensor : subgraph_output_tensors) {
+                tensor->setProducer(subgraph_node);
+            }
+            for (auto it : inputs) {
+                subgraph_node->indegree += it->producer == NULL ? 0 : 1;
             }
         }
 
-        // Add Sub Graph node
+        // Add subgraph_node to operators
         operators.push_back(subgraph_node);
+
+        // Remove old nodes from operators
+        for (auto old_node : old_nodes) {
+            auto operators_iter =
+                std::find(operators.begin(), operators.end(), old_node);
+            if (operators_iter != operators.end()) {
+                operators.erase(operators_iter);
+            }
+        }
     }
 
 }  // namespace tilegraph::graph

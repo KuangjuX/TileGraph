@@ -1,3 +1,5 @@
+CC := g++
+EXAMPLE := fuse
 
 build:
 	@mkdir build
@@ -7,7 +9,8 @@ test: build
 	@cd build && make test
 
 example:
-	g++ examples/$(EXAMPLE).cpp -o build/$(EXAMPLE) -Iinclude -Lbuild/ -ltilegraph
+	@$(CC) examples/$(EXAMPLE).cpp -Iinclude -Lbuild/ -ltilegraph -Wl,-rpath=build/ -o build/$(EXAMPLE) 
+	@./build/$(EXAMPLE)
 
 clean:
 	@rm -rf build

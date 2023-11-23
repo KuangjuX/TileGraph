@@ -86,6 +86,8 @@ namespace tilegraph::graph {
         ~Data() = default;
         void setProducer(Node *producer_value);
         void addConsumer(Node *consumer_value);
+        Data *clone(Data *);
+
         //   void printData();
         //   void printLink();
         //   bool isContiguous();

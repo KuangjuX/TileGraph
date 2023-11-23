@@ -5,6 +5,8 @@
 #include "optimizer/fusion/graph_fusion_base.hpp"
 #include "optimizer/fusion/graph_gemm_fusion.hpp"
 
+#include <iostream>
+
 int main() {
     using namespace tilegraph::fusion;
     using namespace tilegraph::operators;
@@ -26,6 +28,10 @@ int main() {
     Node* fused_node = new Node(gemm->inputs, relu2->inputs, subgraph);
 
     graph->fuseNode({gemm, relu2}, fused_node);
+
+    std::cout << "Fuse node: " << fused_node->name << std::endl;
+
+    auto ordered_ops = graph->topoSort();
 
     return 0;
 }
