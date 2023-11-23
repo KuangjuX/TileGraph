@@ -1,4 +1,6 @@
 #include <algorithm>
+#include <iostream>
+
 #include <fmt/core.h>
 
 #include "core/graph/graph.hpp"
@@ -138,6 +140,8 @@ namespace tilegraph::graph {
         }
         std::vector<Node*> result;
         while (!operators_indegree.empty()) {
+            std::cout << "operators_indegree.size(): "
+                      << operators_indegree.size() << std::endl;
             for (auto op = operators_indegree.begin();
                  op != operators_indegree.end(); ++op) {
                 if (op->second == 0) {

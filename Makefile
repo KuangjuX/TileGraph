@@ -6,5 +6,8 @@ build:
 test: build
 	@cd build && make test
 
+example:
+	g++ examples/$(EXAMPLE).cpp -o build/$(EXAMPLE) -Iinclude -Lbuild/ -ltilegraph
+
 clean:
 	@rm -rf build

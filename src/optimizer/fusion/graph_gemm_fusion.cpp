@@ -35,7 +35,7 @@ namespace tilegraph {
                             // create subgraph
                             auto subgraph = std::make_shared<SubGraph>(
                                 SubGraph({node, successor_node}));
-                            // crate fused node
+                            // create fused node
                             Node* fused_node =
                                 new Node(node->inputs, successor_node->outputs,
                                          subgraph);
