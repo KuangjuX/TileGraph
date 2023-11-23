@@ -2,6 +2,8 @@
 
 #include <fmtlog.h>
 
+using namespace tilegraph::graph;
+
 namespace tilegraph {
     namespace fusion {
 

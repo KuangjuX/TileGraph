@@ -8,6 +8,7 @@
 #include <gtest/gtest.h>
 
 using namespace tilegraph;
+using namespace tilegraph::operators;
 using namespace tilegraph::fusion;
 
 TEST(Fusion, gemm_relu) {

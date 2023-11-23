@@ -1,6 +1,6 @@
 #include <vector>
 
-namespace tilegraph {
+namespace tilegraph::graph {
     // class GraphBase {
     //    private:
     //     static int64_t count;

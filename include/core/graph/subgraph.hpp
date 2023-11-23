@@ -1,7 +1,7 @@
 #pragma once
 #include "core/graph/graph.hpp"
 
-namespace tilegraph {
+namespace tilegraph::graph {
 
     class Data;
     class Node;

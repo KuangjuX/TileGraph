@@ -1,7 +1,8 @@
 #pragma once
 #include "core/graph/graph.hpp"
 
-namespace tilegraph {
+namespace tilegraph::operators {
+    using namespace tilegraph::graph;
 
     class Gemm : public Node {
        public:
@@ -13,4 +14,4 @@ namespace tilegraph {
         ~Gemm() = default;
     };
 
-}  // namespace tilegraph
+}  // namespace tilegraph::operators

@@ -2,7 +2,7 @@
 
 #include <algorithm>
 
-namespace tilegraph {
+namespace tilegraph::graph {
     int64_t SubGraph::count = 0;
     // Graph implementation
     SubGraph::SubGraph(std::vector<Node*> operators_list,
@@ -88,4 +88,4 @@ namespace tilegraph {
     }
 
     void SubGraph::addNode(Node* node) { this->operators.push_back(node); }
-}  // namespace tilegraph
+}  // namespace tilegraph::graph

@@ -2,6 +2,8 @@
 #include "optimizer/fusion/graph_fusion_base.hpp"
 #include "core/graph/subgraph.hpp"
 
+using namespace tilegraph::graph;
+
 namespace tilegraph {
     namespace fusion {
         class GemmFusion : public GraphFusionBase {

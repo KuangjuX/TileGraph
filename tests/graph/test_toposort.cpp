@@ -7,6 +7,8 @@
 #include <memory>
 
 using namespace tilegraph;
+using namespace tilegraph::graph;
+using namespace tilegraph::operators;
 
 TEST(Graph, toposort) {
     Data* a = new Data({100});

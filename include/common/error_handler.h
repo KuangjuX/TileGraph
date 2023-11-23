@@ -3,7 +3,7 @@
 #include <fmt/format.h>
 #include <stdexcept>
 
-namespace refactor {
+namespace tilegraph {
     struct UnimplementError : public std::logic_error {
         explicit UnimplementError(std::string msg)
             : std::logic_error(std::move(msg)) {}
@@ -13,7 +13,7 @@ namespace refactor {
         explicit UnreachableError(std::string msg)
             : std::logic_error(std::move(msg)) {}
     };
-}  // namespace refactor
+}  // namespace tilegraph
 
 #define ERROR_MSG(MSG) fmt::format("{} Source {}:{}", (MSG), __FILE__, __LINE__)
 #define RUNTIME_ERROR(MSG) throw std::runtime_error(ERROR_MSG(MSG))

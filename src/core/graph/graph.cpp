@@ -4,7 +4,7 @@
 #include "core/graph/graph.hpp"
 #include "core/graph/subgraph.hpp"
 
-namespace tilegraph {
+namespace tilegraph::graph {
 
     int64_t Node::count = 0;
     int64_t Data::count = 0;

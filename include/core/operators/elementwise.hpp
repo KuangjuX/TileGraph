@@ -1,7 +1,8 @@
 #pragma once
 #include "core/graph/graph.hpp"
 
-namespace tilegraph {
+namespace tilegraph::operators {
+    using namespace tilegraph::graph;
 
     class Binary : public Node {
        public:
@@ -72,4 +73,4 @@ namespace tilegraph {
     DEFINE_UNARY(TANH)
 #undef DEFINE_UNARY
 
-}  // namespace tilegraph
+}  // namespace tilegraph::operators

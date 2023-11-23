@@ -1,6 +1,8 @@
 #include "core/operators/elementwise.hpp"
 
-namespace tilegraph {
+namespace tilegraph::operators {
+
+    using namespace tilegraph::graph;
 
     Binary::Binary(OperatorType type, std::vector<Data *> inputs_list,
                    std::vector<Data *> outputs_list, std::string name_value,

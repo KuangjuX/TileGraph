@@ -1,6 +1,8 @@
 #pragma once
 #include "core/graph/graph.hpp"
 
+using namespace tilegraph::graph;
+
 namespace tilegraph {
     namespace fusion {
         class GraphFusionBase {

@@ -1,6 +1,7 @@
 #include "core/operators/gemm.hpp"
 
-namespace tilegraph {
+namespace tilegraph::operators {
+    using namespace tilegraph::graph;
 
     Gemm::Gemm(std::vector<Data *> inputs_list,
                std::vector<Data *> outputs_list, std::string name_value,
@@ -9,4 +10,4 @@ namespace tilegraph {
         operator_type = OperatorType::GEMM;
     }
 
-}  // namespace tilegraph
+}  // namespace tilegraph::operators
