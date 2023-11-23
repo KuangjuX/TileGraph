@@ -1,4 +1,4 @@
-#include "operators/gemm.hpp"
+#include "core/operators/gemm.hpp"
 
 namespace tilegraph {
 

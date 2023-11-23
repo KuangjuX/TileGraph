@@ -1,6 +1,6 @@
 #include "core/graph/graph.hpp"
 #include "core/type.hpp"
-#include "operators/elementwise.hpp"
+#include "core/operators/elementwise.hpp"
 
 #include <gtest/gtest.h>
 

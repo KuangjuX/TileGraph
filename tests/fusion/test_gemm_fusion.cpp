@@ -1,9 +1,9 @@
 #include "core/graph/graph.hpp"
 #include "core/type.hpp"
-#include "operators/elementwise.hpp"
-#include "operators/gemm.hpp"
-#include "engine/fusion/graph_fusion_base.hpp"
-#include "engine/fusion/graph_gemm_fusion.hpp"
+#include "core/operators/elementwise.hpp"
+#include "core/operators/gemm.hpp"
+#include "optimizer/fusion/graph_fusion_base.hpp"
+#include "optimizer/fusion/graph_gemm_fusion.hpp"
 
 #include <gtest/gtest.h>
 

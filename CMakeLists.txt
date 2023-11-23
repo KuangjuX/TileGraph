@@ -38,8 +38,9 @@ enable_testing()
 file(GLOB_RECURSE SOURCE 
   src/core/*.cpp 
   src/core/graph/*.cpp 
-  src/operators/*.cpp 
-  src/engine/fusion/*.cpp
+  src/core/operators/*.cpp 
+  src/optimizer/fusion/*.cpp
+  src/codegen/*.cpp
 )
 
 add_library(tilegraph SHARED ${SOURCE})
@@ -64,4 +65,5 @@ endfunction()
 if(BUILD_TEST)
     build_test(tests/graph/*.cpp)
     build_test(tests/fusion/*.cpp)
+    build_test(tests/codegen/*.cpp)
 endif()
