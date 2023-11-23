@@ -13,3 +13,6 @@
 [submodule "3rd-party/result"]
 	path = 3rd-party/result
 	url = git@github.com:oktal/result.git
+[submodule "3rd-party/RefactorGraph"]
+	path = 3rd-party/RefactorGraph
+	url = git@github.com:InfiniTensor/RefactorGraph.git

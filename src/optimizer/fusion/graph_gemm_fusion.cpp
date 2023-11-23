@@ -40,10 +40,10 @@ namespace tilegraph {
                                 new Node(node->inputs, successor_node->outputs,
                                          subgraph);
                             // remove original nodes
-                            if (graph->removeNode(node->index) &&
-                                graph->removeNode(successor_node->index)) {
+                            if (graph->fuseNode({node, successor_node},
+                                                fused_node)) {
                                 // add fused node
-                                graph->addNode(fused_node);
+                                FMTLOG(fmtlog::INF, "Fused GEMM and RELU");
                             } else {
                                 FMTLOG(fmtlog::ERR, "Failed to remove nodes");
                             }

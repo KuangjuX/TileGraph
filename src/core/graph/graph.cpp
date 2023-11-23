@@ -132,20 +132,20 @@ namespace tilegraph::graph {
     }
 
     std::vector<Node*> Graph::topoSort() {
-        std::unordered_map<Node*, int64_t> operators_temp;
+        std::unordered_map<Node*, int64_t> operators_indegree;
         for (auto op : operators) {
-            operators_temp[op] = op->indegree;
+            operators_indegree[op] = op->indegree;
         }
         std::vector<Node*> result;
-        while (!operators_temp.empty()) {
-            for (auto op = operators_temp.begin(); op != operators_temp.end();
-                 ++op) {
+        while (!operators_indegree.empty()) {
+            for (auto op = operators_indegree.begin();
+                 op != operators_indegree.end(); ++op) {
                 if (op->second == 0) {
                     result.push_back(op->first);
                     for (auto successor : (op->first)->successors) {
-                        --operators_temp[successor];
+                        --operators_indegree[successor];
                     }
-                    operators_temp.erase(op->first);
+                    operators_indegree.erase(op->first);
                     break;
                 }
             }
@@ -179,16 +179,32 @@ namespace tilegraph::graph {
         fmt::print("Graph Name: {}\n", name);
     }
 
-    bool Graph::removeNode(int64_t node_index) {
-        for (auto it = operators.begin(); it != operators.end(); ++it) {
-            if ((*it)->index == node_index) {
-                operators.erase(it);
-                return true;
+    bool Graph::fuseNode(std::vector<Node*> old_nodes, Node* subgraph_node) {
+        // Replace some nodes with subgraph_node
+        auto subgraph_input_tensors = subgraph_node->inputs;
+        auto subgraph_output_tensors = subgraph_node->outputs;
+
+        for (auto tensor : subgraph_input_tensors) {
+            tensor->consumers = {};
+            tensor->addConsumer(subgraph_node);
+        }
+
+        for (auto tensor : subgraph_output_tensors) {
+            tensor->producer = {};
+            tensor->setProducer(subgraph_node);
+        }
+
+        // Remove old nodes
+        for (auto node : old_nodes) {
+            auto node_iter =
+                std::find(operators.begin(), operators.end(), node);
+            if (node_iter != operators.end()) {
+                operators.erase(node_iter);
             }
         }
-        return false;
+
+        // Add Sub Graph node
+        operators.push_back(subgraph_node);
     }
 
-    void Graph::addNode(Node* node) { this->operators.push_back(node); }
-
-}  // namespace tilegraph
+}  // namespace tilegraph::graph

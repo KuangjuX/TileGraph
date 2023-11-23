@@ -4,11 +4,9 @@
 
 using namespace tilegraph::graph;
 
-namespace tilegraph {
-    namespace fusion {
-        class GemmFusion : public GraphFusionBase {
-           public:
-            bool fusion(std::shared_ptr<Graph> graph) override;
-        };
-    }  // namespace fusion
-}  // namespace tilegraph
+namespace tilegraph::fusion {
+    class GemmFusion : public GraphFusionBase {
+       public:
+        bool fusion(std::shared_ptr<Graph> graph) override;
+    };
+}  // namespace tilegraph::fusion

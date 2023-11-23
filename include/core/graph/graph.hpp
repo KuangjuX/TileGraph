@@ -125,8 +125,7 @@ namespace tilegraph::graph {
         //   virtual std::string generatorSourceFile(int64_t indent = 0) = 0;
         //   virtual void applyPlatform(Platform platform) = 0;
         void printGraph();
-        bool removeNode(int64_t index);
-        void addNode(Node *node);
+        bool fuseNode(std::vector<Node *> old_nodes, Node *subgraph_node);
     };
 
-}  // namespace tilegraph
+}  // namespace tilegraph::graph
