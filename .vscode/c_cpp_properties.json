@@ -11,10 +11,7 @@
                 "${workspaceFolder}/3rd-party/fmtlog",
                 "${workspaceFolder}/3rd-party/googletest/googletest/include",
                 "${workspaceFolder}/3rd-party/googletest/googlemock/include",
-                "${workspaceFolder}/3rd-party/RefactorGraph/src/00common/include",
-                "${workspaceFolder}/3rd-party/RefactorGraph/src/01graph_topo/include",
-                "${workspaceFolder}/3rd-party/RefactorGraph/src/01graph_topo/include/graph_topo",
-                "${workspaceFolder}/3rd-party/RefactorGraph/src/05computation/include"
+                "${workspaceFolder}/3rd-party/RefactorGraph/src",
             ],
             "version": 4,
             "intelliSenseMode": "linux-gcc-x64",

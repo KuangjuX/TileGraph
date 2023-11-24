@@ -74,6 +74,23 @@
         "thread": "cpp",
         "typeindex": "cpp",
         "__functional_03": "cpp",
-        "__split_buffer": "cpp"
+        "__split_buffer": "cpp",
+        "scoped_allocator": "cpp",
+        "hash_map": "cpp",
+        "hash_set": "cpp",
+        "barrier": "cpp",
+        "charconv": "cpp",
+        "coroutine": "cpp",
+        "csetjmp": "cpp",
+        "cuchar": "cpp",
+        "regex": "cpp",
+        "source_location": "cpp",
+        "future": "cpp",
+        "latch": "cpp",
+        "ranges": "cpp",
+        "shared_mutex": "cpp",
+        "syncstream": "cpp",
+        "valarray": "cpp",
+        "__bit_reference": "cpp"
     }
 }

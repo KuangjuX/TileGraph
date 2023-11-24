@@ -1,5 +1,5 @@
 CC := g++
-EXAMPLE := fuse
+EXAMPLE := graph_base
 
 build:
 	@mkdir build
@@ -8,7 +8,7 @@ build:
 test: build
 	@cd build && make test
 
-example:
+example: build
 	@$(CC) examples/$(EXAMPLE).cpp -Iinclude -Lbuild/ -ltilegraph -Wl,-rpath=build/ -o build/$(EXAMPLE) 
 	@./build/$(EXAMPLE)
 

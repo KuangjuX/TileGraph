@@ -1,4 +1,8 @@
 #include "core/graph/graph.hpp"
+#include "core/graph/graph_base.hpp"
+#include "core/graph/gnode.hpp"
+#include "core/graph/gedge.hpp"
+#include "core/tensor.hpp"
 #include "core/type.hpp"
 #include "core/operators/elementwise.hpp"
 
@@ -24,4 +28,33 @@ TEST(Graph, toposort) {
 
     EXPECT_EQ(sorted[0]->getOperatorType(), OperatorType::ADD);
     EXPECT_EQ(sorted[1]->getOperatorType(), OperatorType::RELU);
+}
+
+TEST(Graph, graph_base_toposort) {
+    auto tensor_a = std::make_shared<Tensor>(Tensor({5120, 5120}));
+    auto tensor_b = std::make_shared<Tensor>(Tensor({5120, 5120}));
+    auto edge_a = std::make_shared<GEdge>(GEdge(tensor_a));
+    auto edge_b = std::make_shared<GEdge>(GEdge(tensor_b));
+    auto tensor_out_add = std::make_shared<Tensor>(Tensor({5120, 5120}));
+    auto edge_out_add = std::make_shared<GEdge>(GEdge(tensor_out_add));
+    auto node_a = std::make_shared<GNode>(
+        GNode({edge_a, edge_b}, {edge_out_add}, OperatorType::ADD));
+
+    auto tensor_out_relu = std::make_shared<Tensor>(Tensor({5120, 5120}));
+    auto edge_out_relu = std::make_shared<GEdge>(GEdge(tensor_out_relu));
+    auto node_b = std::make_shared<GNode>(
+        GNode({edge_out_add}, {edge_out_relu}, OperatorType::RELU));
+
+    auto tensor_out_softmax = std::make_shared<Tensor>(Tensor({5120, 5120}));
+    auto edge_out_softmax = std::make_shared<GEdge>(GEdge(tensor_out_softmax));
+    auto node_c = std::make_shared<GNode>(
+        GNode({edge_out_relu}, {edge_out_softmax}, OperatorType::SOFTMAX));
+
+    auto graph = std::make_shared<GraphBase>(GraphBase(
+        {node_a, node_b, node_c}, {edge_a, edge_b}, {edge_out_softmax}));
+
+    graph->connect();
+    auto sorted = graph->topoSort();
+    EXPECT_EQ(sorted[0].get()->getOperatorType(), OperatorType::ADD);
+    EXPECT_EQ(sorted[1].get()->getOperatorType(), OperatorType::RELU);
 }

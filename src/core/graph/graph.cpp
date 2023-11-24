@@ -57,30 +57,8 @@ namespace tilegraph::graph {
           inputs(inputs_list),
           outputs(outputs_list),
           subgraph(subgraph) {
-        name = (name == "" ? "Operator_" + std::to_string(index) : name);
-        // if (outputs.empty()) {
-        //     Data* temp;
-        //     for (auto i = 0; i < outputs_num; ++i) {
-        //         temp = new Data(inputs[0]->tensor_dimension, inputs[0]->name,
-        //                         inputs[0]->tensor_datatype,
-        //                         inputs[0]->tensor_type);
-        //         outputs.push_back(temp);
-        //     }
-        // }
-        // for (auto it : inputs) {
-        //     it->addConsumer(this);
-        //     it->remaining += 1;
-        //     if (it->producer != NULL) {
-        //         predecessors.push_back(it->producer);
-        //         it->producer->successors.push_back(this);
-        //     }
-        // }
-        // for (auto it : outputs) {
-        //     it->setProducer(this);
-        // }
-        // for (auto it : inputs) {
-        //     indegree += it->producer == NULL ? 0 : 1;
-        // }
+        name =
+            (name == "" ? "SubGraph_Operator_" + std::to_string(index) : name);
         this->operator_type = OperatorType::SUBGRAPH;
     }
 
@@ -119,29 +97,17 @@ namespace tilegraph::graph {
           outputs(outputs_list),
           platform(Platform::CUDA) {
         name = (name == "" ? "Graph_" + std::to_string(index) : name);
-        for (auto op : operators) {
-            for (auto data : op->inputs) {
-                remaining_data.insert(data);
-            }
-            for (auto data : op->outputs) {
-                auto outputs_iter =
-                    std::find(outputs.begin(), outputs.end(), data);
-                if (outputs_iter == outputs.end()) {
-                    temps.push_back(data);
-                }
-            }
-        }
     }
 
     std::vector<Node*> Graph::topoSort() {
         std::unordered_map<Node*, int64_t> operators_indegree;
         for (auto op : operators) {
             operators_indegree[op] = op->indegree;
+            fmt::println("op->name: {}, op->indegree: {}", op->name,
+                         op->indegree);
         }
         std::vector<Node*> result;
         while (!operators_indegree.empty()) {
-            std::cout << "operators_indegree.size(): "
-                      << operators_indegree.size() << std::endl;
             for (auto op = operators_indegree.begin();
                  op != operators_indegree.end(); ++op) {
                 if (op->second == 0) {
@@ -185,8 +151,12 @@ namespace tilegraph::graph {
 
     bool Graph::fuseNode(std::vector<Node*> old_nodes, Node* subgraph_node) {
         // Replace some nodes with subgraph_node
+
         auto subgraph_input_tensors = subgraph_node->inputs;
         auto subgraph_output_tensors = subgraph_node->outputs;
+
+        fmt::println("subgraph_input_tensors.size(): {}",
+                     subgraph_input_tensors.size());
 
         // Clear subgraph node indgree, predecessors and successors
         subgraph_node->indegree = 0;
@@ -207,17 +177,44 @@ namespace tilegraph::graph {
             tensor->consumers.push_back(subgraph_node);
             tensor->remaining += 1;
             if (tensor->producer != NULL) {
-                // subgraph_node->predecessors->push_back(tensor->producer);
                 subgraph_node->predecessors.push_back(tensor->producer);
                 tensor->producer->successors.push_back(subgraph_node);
+                // Remove old nodes from predecessors.
+                for (auto old_node : old_nodes) {
+                    auto predecessors_iter =
+                        std::find(tensor->producer->successors.begin(),
+                                  tensor->producer->successors.end(), old_node);
+                    if (predecessors_iter !=
+                        tensor->producer->successors.end()) {
+                        tensor->producer->successors.erase(predecessors_iter);
+                    }
+                }
             }
+        }
 
-            for (auto tensor : subgraph_output_tensors) {
-                tensor->setProducer(subgraph_node);
+        for (auto tensor : subgraph_output_tensors) {
+            if (tensor->consumers.size() > 0) {
+                for (auto consumer : tensor->consumers) {
+                    // Add subgraph node successors
+                    subgraph_node->successors.push_back(consumer);
+                    consumer->predecessors.push_back(subgraph_node);
+
+                    // Remove old nodes from consumers
+                    for (auto old_node : old_nodes) {
+                        auto consumers_iter =
+                            std::find(consumer->predecessors.begin(),
+                                      consumer->predecessors.end(), old_node);
+                        if (consumers_iter != consumer->predecessors.end()) {
+                            consumer->predecessors.erase(consumers_iter);
+                        }
+                    }
+                }
             }
-            for (auto it : inputs) {
-                subgraph_node->indegree += it->producer == NULL ? 0 : 1;
-            }
+            tensor->setProducer(subgraph_node);
+        }
+
+        for (auto tensor : subgraph_input_tensors) {
+            subgraph_node->indegree += tensor->producer == NULL ? 0 : 1;
         }
 
         // Add subgraph_node to operators

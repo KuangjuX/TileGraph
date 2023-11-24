@@ -21,6 +21,11 @@ int main() {
 
     Graph* graph =
         new Graph({relu1, gemm, relu2}, {a, b}, {relu2->getOutput(0)});
+    std::cout << "Before fusion: " << std::endl;
+
+    graph->topoSort();
+
+    std::cout << "After fusion: " << std::endl;
     std::shared_ptr<Graph> graph_ptr(graph);
 
     auto subgraph = std::make_shared<SubGraph>(SubGraph({gemm, relu2}));
@@ -28,8 +33,6 @@ int main() {
     Node* fused_node = new Node(gemm->inputs, relu2->inputs, subgraph);
 
     graph->fuseNode({gemm, relu2}, fused_node);
-
-    std::cout << "Fuse node: " << fused_node->name << std::endl;
 
     auto ordered_ops = graph->topoSort();
 

@@ -49,8 +49,8 @@ TEST(Fusion, relu_gemm_relu) {
     auto gemm_fusion = std::make_shared<GemmFusion>();
     gemm_fusion->fusion(graph_ptr);
 
-    // auto ordered_ops = graph_ptr->topoSort();
-    // EXPECT_EQ(ordered_ops.size(), 2);
-    // EXPECT_EQ(ordered_ops[0]->getOperatorType(), OperatorType::RELU);
-    // EXPECT_EQ(ordered_ops[1]->getOperatorType(), OperatorType::SUBGRAPH);
+    auto ordered_ops = graph_ptr->topoSort();
+    EXPECT_EQ(ordered_ops.size(), 2);
+    EXPECT_EQ(ordered_ops[0]->getOperatorType(), OperatorType::RELU);
+    EXPECT_EQ(ordered_ops[1]->getOperatorType(), OperatorType::SUBGRAPH);
 }
