@@ -1,13 +1,13 @@
-#include "core/operators/gemm.hpp"
+// #include "core/operators/gemm.hpp"
 
-namespace tilegraph::operators {
-    using namespace tilegraph::graph;
+// namespace tilegraph::operators {
+//     using namespace tilegraph::graph;
 
-    Gemm::Gemm(std::vector<Data *> inputs_list,
-               std::vector<Data *> outputs_list, std::string name_value,
-               int64_t outputs_num_value)
-        : Node(inputs_list, outputs_list, name_value, outputs_num_value) {
-        operator_type = OperatorType::GEMM;
-    }
+//     Gemm::Gemm(std::vector<Data *> inputs_list,
+//                std::vector<Data *> outputs_list, std::string name_value,
+//                int64_t outputs_num_value)
+//         : Node(inputs_list, outputs_list, name_value, outputs_num_value) {
+//         operator_type = OperatorType::GEMM;
+//     }
 
-}  // namespace tilegraph::operators
+// }  // namespace tilegraph::operators

@@ -49,7 +49,7 @@ namespace tilegraph {
         GEMM,
         SOFTMAX,
 
-        SUBGRAPH,
+        GEMM_RELU
     };
     // KernelType
     enum class KernelType {

@@ -23,6 +23,10 @@ namespace tilegraph::graph {
         GEdge() = delete;
         GEdge(std::shared_ptr<Tensor> tensor_value,
               std::string name_value = "");
+        GEdge(const std::vector<int64_t> &dimension,
+              std::string name_value = "", std::string tensor_name_value = "",
+              TensorDatatype dtype = TensorDatatype::FLOAT,
+              TensorType type = TensorType::VARIABLE);
 
         ~GEdge() = default;
         void setProducer(std::shared_ptr<GNode> producer_value);

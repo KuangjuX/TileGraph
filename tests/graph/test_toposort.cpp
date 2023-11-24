@@ -12,41 +12,35 @@
 
 using namespace tilegraph;
 using namespace tilegraph::graph;
-using namespace tilegraph::operators;
 
-TEST(Graph, toposort) {
-    Data* a = new Data({100});
-    Data* b = new Data({100});
-    Node* op1 = new ADD({a, b});
-    Data* out1 = op1->getOutput(0);
-    Node* op2 = new RELU({out1});
-    Data* out2 = op2->getOutput(0);
+// TEST(Graph, toposort) {
+//     Data* a = new Data({100});
+//     Data* b = new Data({100});
+//     Node* op1 = new ADD({a, b});
+//     Data* out1 = op1->getOutput(0);
+//     Node* op2 = new RELU({out1});
+//     Data* out2 = op2->getOutput(0);
 
-    Graph* graph = new Graph({op1, op2}, {a, b}, {out2});
+//     Graph* graph = new Graph({op1, op2}, {a, b}, {out2});
 
-    std::vector<Node*> sorted = graph->topoSort();
+//     std::vector<Node*> sorted = graph->topoSort();
 
-    EXPECT_EQ(sorted[0]->getOperatorType(), OperatorType::ADD);
-    EXPECT_EQ(sorted[1]->getOperatorType(), OperatorType::RELU);
-}
+//     EXPECT_EQ(sorted[0]->getOperatorType(), OperatorType::ADD);
+//     EXPECT_EQ(sorted[1]->getOperatorType(), OperatorType::RELU);
+// }
 
 TEST(Graph, graph_base_toposort) {
-    auto tensor_a = std::make_shared<Tensor>(Tensor({5120, 5120}));
-    auto tensor_b = std::make_shared<Tensor>(Tensor({5120, 5120}));
-    auto edge_a = std::make_shared<GEdge>(GEdge(tensor_a));
-    auto edge_b = std::make_shared<GEdge>(GEdge(tensor_b));
-    auto tensor_out_add = std::make_shared<Tensor>(Tensor({5120, 5120}));
-    auto edge_out_add = std::make_shared<GEdge>(GEdge(tensor_out_add));
+    auto edge_a = std::make_shared<GEdge>(GEdge({5120, 5120}));
+    auto edge_b = std::make_shared<GEdge>(GEdge({5120, 5120}));
+    auto edge_out_add = std::make_shared<GEdge>(GEdge({5120, 5120}));
     auto node_a = std::make_shared<GNode>(
         GNode({edge_a, edge_b}, {edge_out_add}, OperatorType::ADD));
 
-    auto tensor_out_relu = std::make_shared<Tensor>(Tensor({5120, 5120}));
-    auto edge_out_relu = std::make_shared<GEdge>(GEdge(tensor_out_relu));
+    auto edge_out_relu = std::make_shared<GEdge>(GEdge({5120, 5120}));
     auto node_b = std::make_shared<GNode>(
         GNode({edge_out_add}, {edge_out_relu}, OperatorType::RELU));
 
-    auto tensor_out_softmax = std::make_shared<Tensor>(Tensor({5120, 5120}));
-    auto edge_out_softmax = std::make_shared<GEdge>(GEdge(tensor_out_softmax));
+    auto edge_out_softmax = std::make_shared<GEdge>(GEdge({5120, 5120}));
     auto node_c = std::make_shared<GNode>(
         GNode({edge_out_relu}, {edge_out_softmax}, OperatorType::SOFTMAX));
 
@@ -57,4 +51,5 @@ TEST(Graph, graph_base_toposort) {
     auto sorted = graph->topoSort();
     EXPECT_EQ(sorted[0].get()->getOperatorType(), OperatorType::ADD);
     EXPECT_EQ(sorted[1].get()->getOperatorType(), OperatorType::RELU);
+    EXPECT_EQ(sorted[2].get()->getOperatorType(), OperatorType::SOFTMAX);
 }

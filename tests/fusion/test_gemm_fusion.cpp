@@ -1,56 +1,67 @@
 #include "core/graph/graph.hpp"
 #include "core/type.hpp"
-#include "core/operators/elementwise.hpp"
-#include "core/operators/gemm.hpp"
+// #include "core/operators/elementwise.hpp"
+// #include "core/operators/gemm.hpp"
+#include "core/graph/graph_base.hpp"
+#include "core/graph/gnode.hpp"
+#include "core/graph/gedge.hpp"
 #include "optimizer/fusion/graph_fusion_base.hpp"
 #include "optimizer/fusion/graph_gemm_fusion.hpp"
 
 #include <gtest/gtest.h>
 
 using namespace tilegraph;
-using namespace tilegraph::operators;
 using namespace tilegraph::fusion;
+using namespace tilegraph::graph;
 
 TEST(Fusion, gemm_relu) {
-    Data* a = new Data({5120, 5120});
-    Data* b = new Data({5120, 5120});
-    Node* gemm = new Gemm({a, b});
-    Data* gemm_out = gemm->getOutput(0);
-    Node* relu = new RELU({gemm_out});
-    Data* relu_out = relu->getOutput(0);
+    auto edge_a = std::make_shared<GEdge>(GEdge({5120, 5120}));
+    auto edge_b = std::make_shared<GEdge>(GEdge({5120, 5120}));
+    auto edge_out_gemm = std::make_shared<GEdge>(GEdge({5120, 5120}));
+    auto gemm = std::make_shared<GNode>(
+        GNode({edge_a, edge_b}, {edge_out_gemm}, {OperatorType::GEMM}));
 
-    Graph* graph = new Graph({gemm, relu}, {a, b}, {relu_out});
-    std::shared_ptr<Graph> graph_ptr(graph);
+    auto edge_out_relu = std::make_shared<GEdge>(GEdge({5120, 5120}));
+    auto relu = std::make_shared<GNode>(
+        GNode({edge_out_gemm}, {edge_out_relu}, {OperatorType::RELU}));
+
+    auto graph = std::make_shared<Graph>(
+        Graph({gemm, relu}, {edge_a, edge_b}, {edge_out_relu}));
+    graph->connect();
 
     auto gemm_fusion = std::make_shared<GemmFusion>();
-    gemm_fusion->fusion(graph_ptr);
+    gemm_fusion->fusion(graph);
 
-    EXPECT_EQ(graph_ptr->operators.size(), 1);
-    EXPECT_EQ(graph_ptr->operators[0]->getOperatorType(),
-              OperatorType::SUBGRAPH);
-
-    auto ordered_ops = graph_ptr->topoSort();
+    auto ordered_ops = graph->topoSort();
     EXPECT_EQ(ordered_ops.size(), 1);
-    EXPECT_EQ(ordered_ops[0]->getOperatorType(), OperatorType::SUBGRAPH);
+    EXPECT_EQ(ordered_ops[0]->getOperatorType(), OperatorType::GEMM_RELU);
 }
 
-TEST(Fusion, relu_gemm_relu) {
+TEST(Fusion, gemm_relu_softmax) {
     // Relu -> GEMM -> Relu
-    Data* a = new Data({5120, 5120});
-    Node* relu1 = new RELU({a});
-    Data* b = new Data({5120, 5120});
-    Node* gemm = new Gemm({relu1->getOutput(0), b});
-    Node* relu2 = new RELU({gemm->getOutput(0)});
+    auto edge_a = std::make_shared<GEdge>(GEdge({5120, 5120}));
+    auto edge_b = std::make_shared<GEdge>(GEdge({5120, 5120}));
+    auto edge_out_gemm = std::make_shared<GEdge>(GEdge({5120, 5120}));
+    auto gemm = std::make_shared<GNode>(
+        GNode({edge_a, edge_b}, {edge_out_gemm}, {OperatorType::GEMM}));
 
-    Graph* graph =
-        new Graph({relu1, gemm, relu2}, {a, b}, {relu2->getOutput(0)});
-    std::shared_ptr<Graph> graph_ptr(graph);
+    auto edge_out_relu = std::make_shared<GEdge>(GEdge({5120, 5120}));
+    auto relu = std::make_shared<GNode>(
+        GNode({edge_out_gemm}, {edge_out_relu}, {OperatorType::RELU}));
+
+    auto edge_out_softmax = std::make_shared<GEdge>(GEdge({5120, 5120}));
+    auto softmax = std::make_shared<GNode>(
+        GNode({edge_out_relu}, {edge_out_softmax}, {OperatorType::SOFTMAX}));
+
+    auto graph = std::make_shared<Graph>(
+        Graph({gemm, relu, softmax}, {edge_a, edge_b}, {edge_out_softmax}));
+    graph->connect();
 
     auto gemm_fusion = std::make_shared<GemmFusion>();
-    gemm_fusion->fusion(graph_ptr);
+    gemm_fusion->fusion(graph);
 
-    auto ordered_ops = graph_ptr->topoSort();
+    auto ordered_ops = graph->topoSort();
     EXPECT_EQ(ordered_ops.size(), 2);
-    EXPECT_EQ(ordered_ops[0]->getOperatorType(), OperatorType::RELU);
-    EXPECT_EQ(ordered_ops[1]->getOperatorType(), OperatorType::SUBGRAPH);
+    EXPECT_EQ(ordered_ops[0]->getOperatorType(), OperatorType::GEMM_RELU);
+    EXPECT_EQ(ordered_ops[1]->getOperatorType(), OperatorType::SOFTMAX);
 }

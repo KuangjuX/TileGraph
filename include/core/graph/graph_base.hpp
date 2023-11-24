@@ -25,7 +25,7 @@ namespace tilegraph::graph {
         ~GraphBase() = default;
         void connect();
         std::vector<std::shared_ptr<GNode>> topoSort();
-        // void printGraph();
-        // bool fuseNode(std::vector<Node *> old_nodes, Node *subgraph_node);
+        bool fuseNode(std::vector<std::shared_ptr<GNode>> old_nodes,
+                      std::shared_ptr<GNode> subgraph_node);
     };
 }  // namespace tilegraph::graph

@@ -10,7 +10,7 @@ namespace tilegraph {
         struct GemmGroup {
             int group_id;
             bool can_merge;
-            std::vector<std::shared_ptr<Node>> nodes;
+            std::vector<std::shared_ptr<GNode>> nodes;
             std::vector<std::shared_ptr<Graph>> sub_groups;
         };
 
@@ -33,12 +33,11 @@ namespace tilegraph {
                         if (successor_node->getOperatorType() ==
                             OperatorType::RELU) {
                             // create subgraph
-                            auto subgraph = std::make_shared<SubGraph>(
-                                SubGraph({node, successor_node}));
                             // create fused node
-                            Node* fused_node =
-                                new Node(node->inputs, successor_node->outputs,
-                                         subgraph);
+                            std::shared_ptr<GNode> fused_node =
+                                std::make_shared<GNode>(
+                                    GNode(node->inputs, successor_node->outputs,
+                                          OperatorType::GEMM_RELU));
                             // remove original nodes
                             if (graph->fuseNode({node, successor_node},
                                                 fused_node)) {
