@@ -91,6 +91,10 @@
         "shared_mutex": "cpp",
         "syncstream": "cpp",
         "valarray": "cpp",
-        "__bit_reference": "cpp"
+        "__bit_reference": "cpp",
+        "__hash_table": "cpp",
+        "__tree": "cpp",
+        "queue": "cpp",
+        "stack": "cpp"
     }
 }
