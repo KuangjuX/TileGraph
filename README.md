@@ -1,6 +1,7 @@
 # TileGraph
 TileGraph is an experimental DNN compiler that utilizes static code generation and kernel fusion techniques.
 
+![](docs/tilegraph.png)
 
 ## Reference Projects
 - [InfiniTensor/Refactor](https://github.com/InfiniTensor/RefactorGraph)
