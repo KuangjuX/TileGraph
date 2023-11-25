@@ -1,5 +1,5 @@
 CC := g++
-EXAMPLE := graph_base
+EXAMPLE := subgraph_match
 
 build:
 	@mkdir build

@@ -40,6 +40,7 @@ file(GLOB_RECURSE SOURCE
   src/core/graph/*.cpp 
   src/core/operators/*.cpp 
   src/optimizer/fusion/*.cpp
+  srs/optimizer/fusion/subgraph_fusion/*.cpp
   src/codegen/*.cpp
 )
 
@@ -48,8 +49,8 @@ add_library(tilegraph SHARED ${SOURCE})
 add_compile_options(-Wall)
 # add_compile_options(-Werror)
 
-target_link_directories(tilegraph PRIVATE 3rd-party/fmt/build)
-target_link_libraries(tilegraph PRIVATE fmt)
+target_link_directories(tilegraph PUBLIC 3rd-party/fmt/build)
+target_link_libraries(tilegraph PUBLIC fmt)
 
 function(build_test files)
   # Non-recursive glob for skip failed tests

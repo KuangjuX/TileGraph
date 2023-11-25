@@ -63,9 +63,13 @@ namespace tilegraph::graph {
     //     this->operator_type = OperatorType::SUBGRAPH;
     // }
 
+    int64_t GNode::getIndex() { return index; }
+
     std::shared_ptr<GEdge> GNode::getOutput(int64_t index) {
         return outputs[index];
     }
+
+    std::vector<std::shared_ptr<GEdge>> GNode::getInputs() { return inputs; }
 
     std::vector<std::shared_ptr<GEdge>> GNode::getOutputs() { return outputs; }
 

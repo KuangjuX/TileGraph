@@ -1,6 +1,6 @@
 #include "core/tensor.hpp"
 
-namespace tilegraph::graph {
+namespace tilegraph {
 
     int64_t Tensor::tensor_count = 0;
 
@@ -13,4 +13,4 @@ namespace tilegraph::graph {
           tensor_type(type),
           tensor_dimension(dimension) {}
 
-}  // namespace tilegraph::graph
+}  // namespace tilegraph

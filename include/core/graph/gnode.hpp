@@ -38,7 +38,9 @@ namespace tilegraph::graph {
         ~GNode() = default;
         // std::shared_ptr<Edge> getOutput(int64_t index);
         // std::vector<std::shared_ptr<Edge>> getOutputs();
+        int64_t getIndex();
         std::shared_ptr<GEdge> getOutput(int64_t index);
+        std::vector<std::shared_ptr<GEdge>> getInputs();
         std::vector<std::shared_ptr<GEdge>> getOutputs();
         OperatorType getOperatorType();
     };

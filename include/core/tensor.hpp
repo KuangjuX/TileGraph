@@ -4,7 +4,7 @@
 
 #include "core/type.hpp"
 
-namespace tilegraph::graph {
+namespace tilegraph {
     class Tensor {
        private:
         static int64_t tensor_count;
@@ -25,4 +25,4 @@ namespace tilegraph::graph {
 
         ~Tensor() = default;
     };
-}  // namespace tilegraph::graph
+}  // namespace tilegraph

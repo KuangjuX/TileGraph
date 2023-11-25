@@ -15,12 +15,16 @@ namespace tilegraph::graph {
           tensor(std::make_shared<Tensor>(dimension, tensor_name_value, dtype,
                                           type)) {}
 
-    void GEdge::addConsumer(std::shared_ptr<GNode> consumer_value) {
-        consumers.push_back(consumer_value);
+    void GEdge::addConsumer(std::shared_ptr<GNode> node) {
+        consumers.push_back(node);
     }
 
-    void GEdge::setProducer(std::shared_ptr<GNode> producer_value) {
-        producer = producer_value;
+    void GEdge::setProducer(std::shared_ptr<GNode> node) { producer = node; }
+
+    std::shared_ptr<GNode> GEdge::getProducer() { return producer; }
+
+    std::vector<std::shared_ptr<GNode>> GEdge::getConsumers() {
+        return consumers;
     }
 
     std::shared_ptr<Tensor> GEdge::getTensor() { return tensor; }

@@ -29,8 +29,10 @@ namespace tilegraph::graph {
               TensorType type = TensorType::VARIABLE);
 
         ~GEdge() = default;
-        void setProducer(std::shared_ptr<GNode> producer_value);
-        void addConsumer(std::shared_ptr<GNode> consumer_value);
+        void setProducer(std::shared_ptr<GNode> node);
+        void addConsumer(std::shared_ptr<GNode> node);
+        std::shared_ptr<GNode> getProducer();
+        std::vector<std::shared_ptr<GNode>> getConsumers();
         std::shared_ptr<Tensor> getTensor();
     };
 }  // namespace tilegraph::graph
