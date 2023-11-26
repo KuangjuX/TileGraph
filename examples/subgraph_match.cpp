@@ -39,7 +39,7 @@ int main() {
     auto gemm_relu_fusion = std::make_shared<GemmReluFusion>(graph);
 
     gemm_relu_fusion->create_subgraphs();
-    gemm_relu_fusion->match();
+    gemm_relu_fusion->match_and_fuse_subgraph();
 
     return 0;
 }

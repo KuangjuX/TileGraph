@@ -55,6 +55,12 @@ namespace tilegraph::graph {
         }
     }
 
+    void GraphBase::earseNode(GNode::Pointer node) {}
+
+    void GraphBase::addNode(GNode::Pointer node) {}
+
+    void GraphBase::disconect(GNode::Pointer node) {}
+
     std::vector<std::shared_ptr<GNode>> GraphBase::topoSort() {
         std::unordered_map<std::shared_ptr<GNode>, int64_t> operators_indegree;
         for (auto op : operators) {

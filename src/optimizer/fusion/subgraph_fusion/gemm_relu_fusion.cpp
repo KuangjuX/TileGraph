@@ -7,11 +7,9 @@
 namespace tilegraph::fusion::subgraph {
 
     GemmReluFusion::GemmReluFusion(std::shared_ptr<graph::Graph> graph)
-        : graph(graph) {
-        subgraph_match = std::make_shared<graph::SubGraphMatch>(graph);
-    }
+        : SubgraphFusionBase(graph) {}
 
-    bool GemmReluFusion::create_subgraphs() {
+    void GemmReluFusion::create_subgraphs() {
         using namespace graph;
         auto check_root = [](std::shared_ptr<GNode> gnode) -> bool {
             if (gnode->getOperatorType() != OperatorType::GEMM) {
@@ -39,20 +37,12 @@ namespace tilegraph::fusion::subgraph {
         }
 
         subgraphs.push_back(s_gemm_relu);
-
-        return true;
     }
 
-    bool GemmReluFusion::match() {
-        for (auto subgraph : subgraphs) {
-            if (subgraph_match->Match(subgraph)) {
-                auto records = subgraph_match->get_matched_subgraph();
-                fmt::println("Matched subgraph: {}", subgraph->name);
-            }
-        }
-        return true;
+    Result<void, SubgraphFusionBase::FusionError> GemmReluFusion::fuse_subgraph(
+        graph::SubGraphRecord::Pointer subgraph_record) {
+        fmt::println("Fuse subgraph statring node: {}",
+                     subgraph_record->get_starting_node()->name);
+        return Ok();
     }
-
-    bool GemmReluFusion::fuse_subgraph(
-        graph::SubGraphRecord::Pointer subgraph_record) {}
 }  // namespace tilegraph::fusion::subgraph

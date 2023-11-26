@@ -34,5 +34,7 @@ namespace tilegraph::graph {
         std::shared_ptr<GNode> getProducer();
         std::vector<std::shared_ptr<GNode>> getConsumers();
         std::shared_ptr<Tensor> getTensor();
+
+        using Pointer = std::shared_ptr<GEdge>;
     };
 }  // namespace tilegraph::graph

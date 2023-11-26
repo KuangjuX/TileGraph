@@ -10,6 +10,7 @@ namespace tilegraph {
         static int64_t tensor_count;
 
        public:
+        using Pointer = std::shared_ptr<Tensor>;
         std::string name;
         const int64_t index;
         TensorDatatype tensor_datatype;

@@ -22,6 +22,7 @@ endif()
 
 include_directories(include)
 include_directories(3rd-party/fmt/include)
+include_directories(3rd-party/result)
 include_directories(3rd-party/fmtlog)
 add_definitions(-D FMTLOG_HEADER_ONLY)
 
@@ -49,8 +50,8 @@ add_library(tilegraph SHARED ${SOURCE})
 add_compile_options(-Wall)
 # add_compile_options(-Werror)
 
-target_link_directories(tilegraph PUBLIC 3rd-party/fmt/build)
-target_link_libraries(tilegraph PUBLIC fmt)
+target_link_directories(tilegraph PRIVATE 3rd-party/fmt/build)
+target_link_libraries(tilegraph PRIVATE fmt)
 
 function(build_test files)
   # Non-recursive glob for skip failed tests

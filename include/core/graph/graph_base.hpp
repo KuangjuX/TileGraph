@@ -23,9 +23,22 @@ namespace tilegraph::graph {
                   std::vector<std::shared_ptr<GEdge>> outputs_list = {},
                   std::string name_value = "");
         ~GraphBase() = default;
+        // Connect the graph based nodes and edges.
         void connect();
+        // Topological sort the graph.
         std::vector<std::shared_ptr<GNode>> topoSort();
+        // Earse the node from the graph.
+        void earseNode(GNode::Pointer node);
+        // Add the node to the graph.
+        void addNode(GNode::Pointer node);
+        // Fuse the subgraph into a single node.
         bool fuseNode(std::vector<std::shared_ptr<GNode>> old_nodes,
                       std::shared_ptr<GNode> subgraph_node);
+
+        using Pointer = std::shared_ptr<GraphBase>;
+
+       private:
+        // Disconnect the node from the graph.
+        void disconect(GNode::Pointer node);
     };
 }  // namespace tilegraph::graph

@@ -43,5 +43,7 @@ namespace tilegraph::graph {
         std::vector<std::shared_ptr<GEdge>> getInputs();
         std::vector<std::shared_ptr<GEdge>> getOutputs();
         OperatorType getOperatorType();
+
+        using Pointer = std::shared_ptr<GNode>;
     };
 }  // namespace tilegraph::graph
