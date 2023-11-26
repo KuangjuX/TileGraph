@@ -87,12 +87,6 @@ TEST(Fusion, relu_gemm_relu_softmax) {
     auto graph = std::make_shared<Graph>(Graph(
         {relu1, gemm, relu2, softmax}, {edge_a, edge_b}, {edge_out_softmax}));
     graph->connect();
-    // auto ordered_ops = graph->topoSort();
-    // EXPECT_EQ(ordered_ops.size(), 4);
-    // EXPECT_EQ(ordered_ops[0]->getOperatorType(), OperatorType::RELU);
-    // EXPECT_EQ(ordered_ops[1]->getOperatorType(), OperatorType::GEMM);
-    // EXPECT_EQ(ordered_ops[2]->getOperatorType(), OperatorType::RELU);
-    // EXPECT_EQ(ordered_ops[3]->getOperatorType(), OperatorType::SOFTMAX);
 
     auto gemm_fusion = std::make_shared<GemmFusion>();
     gemm_fusion->fusion(graph);
