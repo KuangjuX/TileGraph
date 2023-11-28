@@ -6,6 +6,6 @@ using namespace tilegraph::graph;
 namespace tilegraph::fusion {
     class GraphFusionBase {
        public:
-        virtual bool fusion(std::shared_ptr<Graph> graph) { return true; }
+        virtual bool fusion(Graph::Pointer graph) { return true; }
     };
 }  // namespace tilegraph::fusion

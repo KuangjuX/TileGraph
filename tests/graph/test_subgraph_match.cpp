@@ -44,4 +44,12 @@ TEST(SubGraphFuse, gemm_relu) {
 
     gemm_relu_fusion->create_subgraphs();
     gemm_relu_fusion->match_and_fuse_subgraph();
+
+    // Test graph fusion
+    auto ordered_ops = graph->topoSort();
+    EXPECT_EQ(ordered_ops.size(), 3);
+
+    EXPECT_EQ(ordered_ops[0]->getOperatorType(), OperatorType::RELU);
+    EXPECT_EQ(ordered_ops[1]->getOperatorType(), OperatorType::GEMM_RELU);
+    EXPECT_EQ(ordered_ops[2]->getOperatorType(), OperatorType::SOFTMAX);
 }

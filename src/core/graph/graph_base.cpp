@@ -65,7 +65,6 @@ namespace tilegraph::graph {
         auto operators_iter =
             std::find(operators.begin(), operators.end(), node);
         if (operators_iter != operators.end()) {
-            fmt::println("Remove node {} from operators.", node->name);
             operators.erase(operators_iter);
             return true;
         }
@@ -146,9 +145,8 @@ namespace tilegraph::graph {
         std::unordered_map<std::shared_ptr<GNode>, int64_t> operators_indegree;
         for (auto op : operators) {
             operators_indegree[op] = op->indegree;
-            fmt::println("op->indegree: {}, name: {}", op->indegree, op->name);
+            logi("op->indegree: {}, name: {}", op->indegree, op->name);
         }
-        fmt::println("op size: {}", operators.size());
         std::vector<std::shared_ptr<GNode>> result;
         while (!operators_indegree.empty()) {
             for (auto op = operators_indegree.begin();

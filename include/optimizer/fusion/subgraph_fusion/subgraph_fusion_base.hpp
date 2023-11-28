@@ -10,6 +10,7 @@ namespace tilegraph::fusion::subgraph {
         struct FusionError {
             enum class Kind {
                 UnmatchedSubgraph,
+                FailedToFuseSubgraph,
             };
 
             Kind kind;

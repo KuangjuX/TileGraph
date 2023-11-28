@@ -41,10 +41,21 @@ namespace tilegraph::fusion::subgraph {
 
     Result<void, SubgraphFusionBase::FusionError> GemmReluFusion::fuse_subgraph(
         graph::SubGraphRecord::Pointer subgraph_record) {
-        fmt::println(
-            "Fuse subgraph statring node: {}, type: {}",
-            subgraph_record->get_starting_node()->name,
-            toString(subgraph_record->get_starting_node()->getOperatorType()));
+        // fmt::println(
+        //     "Fuse subgraph statring node: {}, type: {}",
+        //     subgraph_record->get_starting_node()->name,
+        //     toString(subgraph_record->get_starting_node()->getOperatorType()));
+        auto pr_gemm_relu = subgraph_record->pattern_records[0];
+        auto gemm = pr_gemm_relu->nodes[0];
+        auto relu = pr_gemm_relu->nodes[1];
+
+        auto fused_node = std::make_shared<graph::GNode>(graph::GNode(
+            gemm->getInputs(), relu->getOutputs(), OperatorType::GEMM_RELU));
+        if (!graph->fuseNode({gemm, relu}, fused_node)) {
+            loge("Failed to fuse subgraph");
+            return Err(SubgraphFusionBase::FusionError{
+                SubgraphFusionBase::FusionError::Kind::FailedToFuseSubgraph});
+        }
         return Ok();
     }
 }  // namespace tilegraph::fusion::subgraph

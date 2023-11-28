@@ -13,7 +13,7 @@ namespace tilegraph::fusion::subgraph {
         for (auto subgraph : this->subgraphs) {
             if (this->subgraph_match->Match(subgraph)) {
                 auto records = this->subgraph_match->get_matched_subgraph();
-                fmt::println("Matched record size: {}", records.size());
+                logi("Matched record size: {}", records.size());
                 for (auto record : records) {
                     this->fuse_subgraph(record);
                 }
