@@ -8,7 +8,7 @@
 
 #include "core/graph/gnode.hpp"
 #include "core/graph/graph.hpp"
-#include "common/common.h"
+#include "common/common.hpp"
 
 namespace tilegraph::graph {
 

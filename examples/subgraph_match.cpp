@@ -4,7 +4,7 @@
 #include "core/graph/gnode.hpp"
 #include "core/graph/gedge.hpp"
 #include "optimizer/fusion/subgraph_fusion/gemm_relu_fusion.hpp"
-#include "common/common.h"
+#include "common/common.hpp"
 
 #include <fmtlog.h>
 

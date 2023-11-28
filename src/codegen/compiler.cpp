@@ -4,7 +4,7 @@
 #include <unistd.h>
 
 #include "codegen/compiler.hpp"
-#include "common/common.h"
+#include "common/common.hpp"
 
 namespace tilegraph::codegen {
     namespace fs = std::filesystem;

@@ -5,7 +5,7 @@
 #include "core/graph/gedge.hpp"
 #include "core/graph/gnode.hpp"
 #include "core/tensor.hpp"
-#include "common/common.h"
+#include "common/common.hpp"
 
 using namespace tilegraph;
 using namespace tilegraph::graph;

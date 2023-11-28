@@ -3,7 +3,7 @@
 #include "core/operators/elementwise.hpp"
 #include "core/operators/gemm.hpp"
 #include "optimizer/fusion/subgraph_fusion/gemm_relu_fusion.hpp"
-#include "common/common.h"
+#include "common/common.hpp"
 #include <fmtlog.h>
 #include <fmt/core.h>
 

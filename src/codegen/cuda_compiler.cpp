@@ -1,7 +1,7 @@
 #include <dlfcn.h>
 
 #include "codegen/cuda_compiler.hpp"
-#include "common/common.h"
+#include "common/common.hpp"
 
 namespace tilegraph::codegen {
 
