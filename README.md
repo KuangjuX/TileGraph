@@ -8,6 +8,28 @@ TileGraph is an experimental DNN compiler that utilizes static code generation a
 
 ![](docs/tilegraph.png)
 
+## Get Started
+### Clone Project
+```
+git clone git@github.com:KuangjuX/TileGraph.git
+git submodule update --init --recursive
+```
+
+### Install Dependencies
+```
+cd 3rd-party/fmt && mkdir build && cd build && cmake -DCMAKE_POSITION_INDEPENDENT_CODE=TRUE .. && make
+```
+
+### Test
+```
+make test
+```
+
+### Run Examples
+```
+make examples
+```
+
 ## Reference Projects
 
 - [InfiniTensor/Refactor](https://github.com/InfiniTensor/RefactorGraph): 分层解耦的深度学习推理引擎
