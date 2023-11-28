@@ -4,11 +4,12 @@
 #include <memory>
 
 #include "core/type.hpp"
+#include "core/operators/operator.hpp"
 #include "core/graph/subgraph.hpp"
 
 namespace tilegraph::graph {
+    using namespace tilegraph::operators;
     class GEdge;
-    // class SubGraph;
     class GNode {
        private:
         static int64_t node_count;
@@ -24,7 +25,9 @@ namespace tilegraph::graph {
         std::vector<std::shared_ptr<GEdge>> outputs;
         std::vector<std::shared_ptr<GNode>> predecessors;
         std::vector<std::shared_ptr<GNode>> successors;
-        OperatorType operator_type;
+        OperatorType op_type;
+        // virtual class.
+        std::shared_ptr<Operator::OpBox> op;
 
        public:
         GNode(std::vector<std::shared_ptr<GEdge>> inputs_list = {},

@@ -14,7 +14,7 @@ namespace tilegraph::graph {
         : name(name_value),
           index(node_count++),
           indegree(0),
-          operator_type(op_type),
+          op_type(op_type),
           outputs_num(outputs_num_value),
           inputs(inputs_list),
           outputs(outputs_list) {
@@ -31,7 +31,7 @@ namespace tilegraph::graph {
 
     std::vector<std::shared_ptr<GEdge>> GNode::getOutputs() { return outputs; }
 
-    OperatorType GNode::getOperatorType() { return operator_type; }
+    OperatorType GNode::getOperatorType() { return op_type; }
 
     bool GNode::earseSuccessor(Pointer node) {
         auto it = std::find(successors.begin(), successors.end(), node);
