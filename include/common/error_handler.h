@@ -1,6 +1,5 @@
 #pragma once
-
-#include <fmt/format.h>
+#include <fmt/core.h>
 #include <stdexcept>
 
 namespace tilegraph {
@@ -19,11 +18,11 @@ namespace tilegraph {
 #define RUNTIME_ERROR(MSG) throw std::runtime_error(ERROR_MSG(MSG))
 #define OUT_OF_RANGE(MSG, A, B) \
     throw std::out_of_range(ERROR_MSG(fmt::format("{}/{} {}", (A), (B), (MSG))))
-#define TODO(MSG) throw refactor::UnimplementError(ERROR_MSG(MSG))
+#define TODO(MSG) throw tilegraph::UnimplementError(ERROR_MSG(MSG))
 
 #define UNREACHABLEX(T, F, ...)                                         \
     [&]() -> T {                                                        \
-        throw refactor::UnreachableError(                               \
+        throw tilegraph::UnreachableError(                              \
             ERROR_MSG(fmt::format("Unreachable: " #F, ##__VA_ARGS__))); \
     }()
 #define UNREACHABLE() UNREACHABLEX(void, "no message")

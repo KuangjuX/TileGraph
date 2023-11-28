@@ -25,9 +25,7 @@ bool SubGraphMatch::Match(SubGraph::Pointer subgraph) {
 bool SubGraphMatch::FindSubGraph(SubGraphRecord::Pointer subgraph_record,
                                  SubGraph::Pointer subgraph,
                                  std::shared_ptr<GNode> start) {
-    // NNFUSION_CHECK(!subgraph->patterns.empty());
-    // ASSERT(subgraph->patterns.size() > 0, "subgraph->patterns size is 0.");
-    assert(subgraph->patterns.size() > 0);
+    ASSERT(subgraph->patterns.size() > 0, "Subgraph patterns is empty!");
     auto init_pattern = subgraph->patterns[0];
     std::vector<PatternRecord::Pointer> init_pattern_records;
     if (FindPattern(init_pattern, init_pattern_records, start)) {
@@ -35,11 +33,10 @@ bool SubGraphMatch::FindSubGraph(SubGraphRecord::Pointer subgraph_record,
             if (SearchSubGraph(subgraph_record, subgraph, pr, 1) &&
                 subgraph_record->is_valid()) {
                 return true;  // return true when we find the first subgraph
+            } else if (!subgraph_record->is_valid()) {
+                loge("Subgraph Invalid!");
+                return false;
             }
-            // else if (!subgraph_record->is_valid())
-            // {
-            //     NNFUSION_LOG(INFO) << "subgraph invalid-----------";
-            // }
         }
     }
 
@@ -120,44 +117,40 @@ void SubGraphMatch::SearchPattern(
         PatternRecord::Pointer pr = std::make_shared<PatternRecord>(pattern);
         pr->nodes = pattern_nodes;
         pr->set_pattern_description_idx(description_idx);
-        if (pr->is_valid()) pattern_records.push_back(pr);
-        // else
-        // {
-        //     NNFUSION_LOG(INFO) << "pattern invalid: ";
-        // }
+        if (pr->is_valid())
+            pattern_records.push_back(pr);
+        else {
+            loge("PatternRecord Invalid!");
+        }
     } else {
         std::vector<std::shared_ptr<GEdge>> edges;
         if (pattern->reverse_order) {
-            // edges = cur_node->get_in_edges();
             edges = cur_node->getInputs();
         } else {
             edges = cur_node->getOutputs();
         }
 
         for (auto edge : edges) {
-            // std::shared_ptr<GNode> sub_node;
             std::vector<std::shared_ptr<GNode>> sub_nodes = {};
             if (pattern->reverse_order) {
-                // sub_node = edge->get_src();
-                // sub_node = edge->producer;
                 sub_nodes.push_back(edge->getProducer());
 
             } else {
-                // sub_node = edge->get_dst();
                 sub_nodes = edge->getConsumers();
             }
 
             for (auto sub_node : sub_nodes) {
                 if (sub_node->getOperatorType() == description_ops[idx]) {
-                    // NNFUSION_LOG(INFO) << sub_node->get_op_type() << " : " <<
-                    // description_ops[idx];
+                    logi("Find Pattern: {}",
+                         toString(sub_node->getOperatorType()));
                     pattern_nodes.push_back(sub_node);
                     SearchPattern(sub_node, description_idx, idx + 1,
                                   pattern_records, pattern_nodes, pattern);
                     pattern_nodes.pop_back();
                 } else {
-                    // NNFUSION_LOG(INFO) << sub_node->get_op_type() << " : " <<
-                    // description_ops[idx];
+                    // logi("Not Find Pattern: {} : {}",
+                    //      toString(sub_node->getOperatorType()),
+                    //      description_ops[idx]);
                 }
             }
         }

@@ -7,12 +7,15 @@
 #include "optimizer/fusion/graph_gemm_fusion.hpp"
 #include "optimizer/fusion/subgraph_fusion/gemm_relu_fusion.hpp"
 
+#include <fmtlog.h>
+
 using namespace tilegraph;
 using namespace tilegraph::fusion;
 using namespace tilegraph::graph;
 using namespace tilegraph::fusion::subgraph;
 
 int main() {
+    fmtlog::setLogLevel(fmtlog::LogLevel::INF);
     // Relu -> GEMM -> Relu -> Softmax
     auto edge_a = std::make_shared<GEdge>(GEdge({5120, 5120}));
     auto edge_out_relu1 = std::make_shared<GEdge>(GEdge({5120, 5120}));

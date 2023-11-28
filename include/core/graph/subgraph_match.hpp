@@ -3,11 +3,12 @@
 #include <string>
 #include <memory>
 #include <functional>
-#include <assert.h>
+
+#include <fmtlog.h>
 
 #include "core/graph/gnode.hpp"
 #include "core/graph/graph.hpp"
-// #include "common/common.h"
+#include "common/common.h"
 
 namespace tilegraph::graph {
 
@@ -40,17 +41,10 @@ namespace tilegraph::graph {
         PatternRecord(Pattern::Pointer p) : pattern(p) {}
 
         std::shared_ptr<GNode> get_next_start_node() {
-            // NNFUSION_CHECK_NOT_NULLPTR(pattern);
-            // NNFUSION_CHECK(pattern_description_idx <
-            //                pattern->descriptions.size());
-            // ASSERT(pattern_description_idx < pattern->descriptions.size(),
-            //        "pattern_description_idx >=
-            //        pattern->descriptions.size()");
-            assert(pattern_description_idx < pattern->descriptions.size());
+            ASSERT(pattern_description_idx < pattern->descriptions.size(),
+                   "Pattern description index out of range.");
             size_t idx = pattern->descriptions[pattern_description_idx].second;
-            // NNFUSION_CHECK(idx < nodes.size());
-            // ASSERT(idx < nodes.size(), "idx >= nodes.size()");
-            assert(idx < nodes.size());
+            ASSERT(idx < nodes.size(), "Index out of range.");
             return nodes[idx];
         }
 

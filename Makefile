@@ -2,7 +2,7 @@ CC := g++
 EXAMPLE := subgraph_match
 
 LD_FLAGS := -Lbuild/ -ltilegraph -Wl,-rpath=build/
-INC_FLAGS := -Iinclude -I3rd-party/result -I3rd-party/fmt/include
+INC_FLAGS := -Iinclude -I3rd-party/result -I3rd-party/fmt/include -I3rd-party/fmtlog
 
 build:
 	@mkdir build

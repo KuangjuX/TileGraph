@@ -25,6 +25,7 @@ include_directories(3rd-party/fmt/include)
 include_directories(3rd-party/result)
 include_directories(3rd-party/fmtlog)
 add_definitions(-D FMTLOG_HEADER_ONLY)
+add_definitions(-D FMT_HEADER_ONLY)
 
 if(BUILD_TEST)
     include_directories(3rd-party/googletest/googletest/include)

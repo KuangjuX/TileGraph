@@ -67,4 +67,7 @@ namespace tilegraph {
 
     // CacheHitLocation
     enum class CacheHitLocation { CACHE, LDRAM, NOT_FOUND, ERROR };
+
+    std::string toString(OperatorType op_type);
+
 }  // namespace tilegraph
