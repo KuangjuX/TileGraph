@@ -148,9 +148,8 @@ void SubGraphMatch::SearchPattern(
                                   pattern_records, pattern_nodes, pattern);
                     pattern_nodes.pop_back();
                 } else {
-                    // logi("Not Find Pattern: {} : {}",
-                    //      toString(sub_node->getOperatorType()),
-                    //      description_ops[idx]);
+                    logi("Not Find Pattern: {}",
+                         toString(sub_node->getOperatorType()));
                 }
             }
         }

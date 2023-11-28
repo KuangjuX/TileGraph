@@ -14,6 +14,8 @@ namespace tilegraph::graph {
         static int64_t node_count;
 
        public:
+        using Pointer = std::shared_ptr<GNode>;
+
         std::string name;
         const int64_t index;
         int64_t indegree;
@@ -36,6 +38,7 @@ namespace tilegraph::graph {
         std::vector<std::shared_ptr<GEdge>> getOutputs();
         OperatorType getOperatorType();
 
-        using Pointer = std::shared_ptr<GNode>;
+        bool earseSuccessor(Pointer node);
+        bool earsePredecessor(Pointer node);
     };
 }  // namespace tilegraph::graph

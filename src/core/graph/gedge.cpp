@@ -1,5 +1,7 @@
 #include "core/graph/gedge.hpp"
 
+#include <algorithm>
+
 namespace tilegraph::graph {
 
     int64_t GEdge::edge_count = 0;
@@ -17,6 +19,15 @@ namespace tilegraph::graph {
 
     void GEdge::addConsumer(std::shared_ptr<GNode> node) {
         consumers.push_back(node);
+    }
+
+    bool GEdge::earseConsumer(GNode::Pointer node) {
+        auto it = std::find(consumers.begin(), consumers.end(), node);
+        if (it != consumers.end()) {
+            consumers.erase(it);
+            return true;
+        }
+        return false;
     }
 
     void GEdge::setProducer(std::shared_ptr<GNode> node) { producer = node; }

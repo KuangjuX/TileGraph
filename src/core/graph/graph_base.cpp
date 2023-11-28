@@ -1,6 +1,7 @@
 #include "core/graph/graph_base.hpp"
 
 #include <fmt/core.h>
+#include <fmtlog.h>
 
 namespace tilegraph::graph {
     int64_t GraphBase::graph_count = 0;
@@ -55,11 +56,91 @@ namespace tilegraph::graph {
         }
     }
 
-    void GraphBase::earseNode(GNode::Pointer node) {}
+    bool GraphBase::earseNode(GNode::Pointer node) {
+        if (!disconect(node)) {
+            loge("Failed to disconect node.");
+            return false;
+        }
+        // Remove node form operators.
+        auto operators_iter =
+            std::find(operators.begin(), operators.end(), node);
+        if (operators_iter != operators.end()) {
+            fmt::println("Remove node {} from operators.", node->name);
+            operators.erase(operators_iter);
+            return true;
+        }
 
-    void GraphBase::addNode(GNode::Pointer node) {}
+        loge("Failed to remove node from operators.");
+        return false;
+    }
 
-    void GraphBase::disconect(GNode::Pointer node) {}
+    bool GraphBase::addNode(GNode::Pointer node) {
+        auto input_edges = node->getInputs();
+        auto output_edges = node->getOutputs();
+        for (auto input : input_edges) {
+            // Add node to input edges' consumer list.
+            input->addConsumer(node);
+            if (input->producer != NULL) {
+                node->predecessors.push_back(input->producer);
+                input->producer->successors.push_back(node);
+            }
+        }
+
+        for (auto output : output_edges) {
+            output->setProducer(node);
+            if (output->consumers.size() > 0) {
+                for (auto consumer : output->consumers) {
+                    node->successors.push_back(consumer);
+                    consumer->predecessors.push_back(node);
+                }
+            }
+        }
+
+        for (auto input : input_edges) {
+            node->indegree += input->producer == NULL ? 0 : 1;
+        }
+
+        operators.push_back(node);
+        return true;
+    }
+
+    bool GraphBase::disconect(GNode::Pointer node) {
+        auto input_edges = node->getInputs();
+        auto output_edges = node->getOutputs();
+
+        for (auto input : input_edges) {
+            // Remove node from consumer list.
+            if (!input->earseConsumer(node)) {
+                loge("Failed to remove node from consumer list.");
+                return false;
+            }
+            // Remove node from input edges' producer list.
+            if (input->producer != NULL) {
+                if (!input->producer->earseSuccessor(node)) {
+                    loge(
+                        "Failed to remove node from inputs' producer node's "
+                        "successor list.");
+                    return false;
+                }
+            }
+        }
+
+        for (auto output : output_edges) {
+            // Remove node from producer list.
+            output->producer = NULL;
+            if (output->consumers.size() != 0) {
+                for (auto consumer : output->consumers) {
+                    if (!consumer->earsePredecessor(node)) {
+                        loge(
+                            "Failed to remove node from outputs' consumer "
+                            "node's predecessor list.");
+                        return false;
+                    }
+                }
+            }
+        }
+        return true;
+    }
 
     std::vector<std::shared_ptr<GNode>> GraphBase::topoSort() {
         std::unordered_map<std::shared_ptr<GNode>, int64_t> operators_indegree;
@@ -67,6 +148,7 @@ namespace tilegraph::graph {
             operators_indegree[op] = op->indegree;
             fmt::println("op->indegree: {}, name: {}", op->indegree, op->name);
         }
+        fmt::println("op size: {}", operators.size());
         std::vector<std::shared_ptr<GNode>> result;
         while (!operators_indegree.empty()) {
             for (auto op = operators_indegree.begin();
@@ -86,81 +168,15 @@ namespace tilegraph::graph {
 
     bool GraphBase::fuseNode(std::vector<std::shared_ptr<GNode>> old_nodes,
                              std::shared_ptr<GNode> subgraph_node) {
-        // Replace some nodes with subgraph_node
-        auto subgraph_input_tensors = subgraph_node->inputs;
-        auto subgraph_output_tensors = subgraph_node->outputs;
-
-        fmt::println("subgraph_input_tensors.size(): {}",
-                     subgraph_input_tensors.size());
-
-        // Clear subgraph node indgree, predecessors and successors
         subgraph_node->indegree = 0;
         subgraph_node->predecessors.clear();
         subgraph_node->successors.clear();
 
-        // Update input and output tensors.
-        for (auto tensor : subgraph_input_tensors) {
-            // Remove old nodes from consumers
-            auto consumers = tensor->consumers;
-            auto consumers_iter =
-                std::find(consumers.begin(), consumers.end(), old_nodes[0]);
-            if (consumers_iter != consumers.end()) {
-                consumers.erase(consumers_iter);
-            }
-            // Add subgraph_node to consumers
-            tensor->consumers.push_back(subgraph_node);
-            if (tensor->producer != NULL) {
-                subgraph_node->predecessors.push_back(tensor->producer);
-                tensor->producer->successors.push_back(subgraph_node);
-                // Remove old nodes from predecessors.
-                for (auto old_node : old_nodes) {
-                    auto predecessors_iter =
-                        std::find(tensor->producer->successors.begin(),
-                                  tensor->producer->successors.end(), old_node);
-                    if (predecessors_iter !=
-                        tensor->producer->successors.end()) {
-                        tensor->producer->successors.erase(predecessors_iter);
-                    }
-                }
-            }
-        }
-
-        for (auto tensor : subgraph_output_tensors) {
-            if (tensor->consumers.size() > 0) {
-                for (auto consumer : tensor->consumers) {
-                    // Add subgraph node successors
-                    subgraph_node->successors.push_back(consumer);
-                    consumer->predecessors.push_back(subgraph_node);
-
-                    // Remove old nodes from consumers
-                    for (auto old_node : old_nodes) {
-                        auto consumers_iter =
-                            std::find(consumer->predecessors.begin(),
-                                      consumer->predecessors.end(), old_node);
-                        if (consumers_iter != consumer->predecessors.end()) {
-                            consumer->predecessors.erase(consumers_iter);
-                        }
-                    }
-                }
-            }
-            tensor->setProducer(subgraph_node);
-        }
-
-        for (auto tensor : subgraph_input_tensors) {
-            subgraph_node->indegree += tensor->producer == NULL ? 0 : 1;
-        }
-
-        // Add subgraph_node to operators
-        operators.push_back(subgraph_node);
-
-        // Remove old nodes from operators
         for (auto old_node : old_nodes) {
-            auto operators_iter =
-                std::find(operators.begin(), operators.end(), old_node);
-            if (operators_iter != operators.end()) {
-                operators.erase(operators_iter);
-            }
+            earseNode(old_node);
         }
+        addNode(subgraph_node);
+        return true;
     }
 
 }  // namespace tilegraph::graph

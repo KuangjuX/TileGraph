@@ -4,37 +4,38 @@
 #include "core/operators/gemm.hpp"
 #include "optimizer/fusion/graph_fusion_base.hpp"
 #include "optimizer/fusion/graph_gemm_fusion.hpp"
+#include <fmtlog.h>
 
-#include <iostream>
+using namespace tilegraph::fusion;
+using namespace tilegraph;
 
 int main() {
-    // using namespace tilegraph::fusion;
-    // using namespace tilegraph::operators;
-    // using namespace tilegraph;
+    fmtlog::setLogLevel(fmtlog::LogLevel::INF);
+    // Relu -> GEMM -> Relu -> Softmax
+    auto edge_a = std::make_shared<GEdge>(GEdge({5120, 5120}));
+    auto edge_out_relu1 = std::make_shared<GEdge>(GEdge({5120, 5120}));
+    auto relu1 = std::make_shared<GNode>(
+        GNode({edge_a}, {edge_out_relu1}, {OperatorType::RELU}));
 
-    // // Relu -> GEMM -> Relu
-    // Data* a = new Data({5120, 5120});
-    // Node* relu1 = new RELU({a});
-    // Data* b = new Data({5120, 5120});
-    // Node* gemm = new Gemm({relu1->getOutput(0), b});
-    // Node* relu2 = new RELU({gemm->getOutput(0)});
+    auto edge_b = std::make_shared<GEdge>(GEdge({5120, 5120}));
+    auto edge_out_gemm = std::make_shared<GEdge>(GEdge({5120, 5120}));
+    auto gemm = std::make_shared<GNode>(
+        GNode({edge_out_relu1, edge_b}, {edge_out_gemm}, {OperatorType::GEMM}));
 
-    // Graph* graph =
-    //     new Graph({relu1, gemm, relu2}, {a, b}, {relu2->getOutput(0)});
-    // std::cout << "Before fusion: " << std::endl;
+    auto edge_out_relu2 = std::make_shared<GEdge>(GEdge({5120, 5120}));
+    auto relu2 = std::make_shared<GNode>(
+        GNode({edge_out_gemm}, {edge_out_relu2}, {OperatorType::RELU}));
 
-    // graph->topoSort();
+    auto edge_out_softmax = std::make_shared<GEdge>(GEdge({5120, 5120}));
+    auto softmax = std::make_shared<GNode>(
+        GNode({edge_out_relu2}, {edge_out_softmax}, {OperatorType::SOFTMAX}));
 
-    // std::cout << "After fusion: " << std::endl;
-    // std::shared_ptr<Graph> graph_ptr(graph);
+    auto graph = std::make_shared<Graph>(Graph(
+        {relu1, gemm, relu2, softmax}, {edge_a, edge_b}, {edge_out_softmax}));
+    graph->connect();
 
-    // auto subgraph = std::make_shared<SubGraph>(SubGraph({gemm, relu2}));
-    // // create fused node
-    // Node* fused_node = new Node(gemm->inputs, relu2->inputs, subgraph);
+    auto gemm_fusion = std::make_shared<GemmFusion>();
+    gemm_fusion->fusion(graph);
 
-    // graph->fuseNode({gemm, relu2}, fused_node);
-
-    // auto ordered_ops = graph->topoSort();
-
-    // return 0;
+    auto ordered_ops = graph->topoSort();
 }

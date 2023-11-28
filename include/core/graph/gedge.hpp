@@ -31,6 +31,7 @@ namespace tilegraph::graph {
         ~GEdge() = default;
         void setProducer(std::shared_ptr<GNode> node);
         void addConsumer(std::shared_ptr<GNode> node);
+        bool earseConsumer(GNode::Pointer node);
         std::shared_ptr<GNode> getProducer();
         std::vector<std::shared_ptr<GNode>> getConsumers();
         std::shared_ptr<Tensor> getTensor();

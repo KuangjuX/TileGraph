@@ -28,9 +28,9 @@ namespace tilegraph::graph {
         // Topological sort the graph.
         std::vector<std::shared_ptr<GNode>> topoSort();
         // Earse the node from the graph.
-        void earseNode(GNode::Pointer node);
+        bool earseNode(GNode::Pointer node);
         // Add the node to the graph.
-        void addNode(GNode::Pointer node);
+        bool addNode(GNode::Pointer node);
         // Fuse the subgraph into a single node.
         bool fuseNode(std::vector<std::shared_ptr<GNode>> old_nodes,
                       std::shared_ptr<GNode> subgraph_node);
@@ -39,6 +39,6 @@ namespace tilegraph::graph {
 
        private:
         // Disconnect the node from the graph.
-        void disconect(GNode::Pointer node);
+        bool disconect(GNode::Pointer node);
     };
 }  // namespace tilegraph::graph
