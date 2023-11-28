@@ -41,10 +41,6 @@ namespace tilegraph::fusion::subgraph {
 
     Result<void, SubgraphFusionBase::FusionError> GemmReluFusion::fuse_subgraph(
         graph::SubGraphRecord::Pointer subgraph_record) {
-        // fmt::println(
-        //     "Fuse subgraph statring node: {}, type: {}",
-        //     subgraph_record->get_starting_node()->name,
-        //     toString(subgraph_record->get_starting_node()->getOperatorType()));
         auto pr_gemm_relu = subgraph_record->pattern_records[0];
         auto gemm = pr_gemm_relu->nodes[0];
         auto relu = pr_gemm_relu->nodes[1];

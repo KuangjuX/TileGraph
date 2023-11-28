@@ -43,6 +43,7 @@ file(GLOB_RECURSE SOURCE
   src/core/operators/*.cpp 
   src/optimizer/fusion/*.cpp
   srs/optimizer/fusion/subgraph_fusion/*.cpp
+  src/optimizer/tilling/*.cpp
   src/codegen/*.cpp
 )
 

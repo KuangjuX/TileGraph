@@ -1,5 +1,5 @@
 CC := g++
-EXAMPLE := fuse
+EXAMPLE := persistent_kernel_fusion
 EXAMPLE_SRCS := $(wildcard examples/*.cpp)
 EXAMPLES := $(patsubst examples/%.cpp, %, $(EXAMPLE_SRCS))
 
