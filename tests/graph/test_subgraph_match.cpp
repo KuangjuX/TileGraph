@@ -4,7 +4,6 @@
 #include "core/graph/gnode.hpp"
 #include "core/graph/gedge.hpp"
 #include "optimizer/fusion/graph_fusion_base.hpp"
-#include "optimizer/fusion/graph_gemm_fusion.hpp"
 #include "optimizer/fusion/subgraph_fusion/gemm_relu_fusion.hpp"
 
 #include <gtest/gtest.h>

@@ -49,10 +49,14 @@ namespace tilegraph::graph {
             }
 
             // print node info
-            fmt::print(
-                "node->name: {}, node->indegree: {}, node->outputs_num: {}\n",
-                node.get()->name, node.get()->indegree,
-                node.get()->outputs_num);
+            // fmt::print(
+            //     "node->name: {}, node->indegree: {}, node->outputs_num:
+            //     {}\n", node.get()->name, node.get()->indegree,
+            //     node.get()->outputs_num);
+            // logi("connect: node->name: {}, node->indegree: {},
+            // node->outputs_num: {}",
+            //      node.get()->name, node.get()->indegree,
+            //      node.get()->outputs_num
         }
     }
 
@@ -145,7 +149,7 @@ namespace tilegraph::graph {
         std::unordered_map<std::shared_ptr<GNode>, int64_t> operators_indegree;
         for (auto op : operators) {
             operators_indegree[op] = op->indegree;
-            logi("op->indegree: {}, name: {}", op->indegree, op->name);
+            // logi("op->indegree: {}, name: {}", op->indegree, op->name);
         }
         std::vector<std::shared_ptr<GNode>> result;
         while (!operators_indegree.empty()) {

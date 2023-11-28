@@ -1,10 +1,11 @@
 #include <memory>
-#include <iostream>
+#include <fmt/core.h>
 
 #include "core/graph/graph_base.hpp"
 #include "core/graph/gedge.hpp"
 #include "core/graph/gnode.hpp"
 #include "core/tensor.hpp"
+#include "common/common.h"
 
 using namespace tilegraph;
 using namespace tilegraph::graph;
@@ -30,15 +31,11 @@ int main() {
     graph->connect();
     auto sorted = graph->topoSort();
 
-    // std::cout << "sorted[0]->getOperatorType() = "
-    //           << sorted[0]->getOperatorType() << std::endl;
-    // std::cout << "sorted[1]->getOperatorType() = "
-    //           << sorted[1]->getOperatorType() << std::endl;
-    std::cout << "sorted.size() = " << sorted.size() << std::endl;
-    // print name
-    for (auto node : sorted) {
-        std::cout << node.get()->name << std::endl;
-    }
-
+    ASSERT(sorted.size() == 2, "Graph node size is not 2");
+    ASSERT(sorted[0]->getOperatorType() == OperatorType::ADD,
+           "Graph node type is not ADD");
+    ASSERT(sorted[1]->getOperatorType() == OperatorType::RELU,
+           "Graph node type is not RELU");
+    fmt::println("Topo sort test passed!");
     return 0;
 }

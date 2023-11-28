@@ -3,9 +3,8 @@
 #include "core/graph/graph_base.hpp"
 #include "core/graph/gnode.hpp"
 #include "core/graph/gedge.hpp"
-#include "optimizer/fusion/graph_fusion_base.hpp"
-#include "optimizer/fusion/graph_gemm_fusion.hpp"
 #include "optimizer/fusion/subgraph_fusion/gemm_relu_fusion.hpp"
+#include "common/common.h"
 
 #include <fmtlog.h>
 
@@ -35,24 +34,26 @@ int main() {
     auto softmax = std::make_shared<GNode>(
         GNode({edge_out_relu2}, {edge_out_softmax}, {OperatorType::SOFTMAX}));
 
-    auto edge_c = std::make_shared<GEdge>(GEdge({5120, 5120}));
-    auto edge_out_gemm_2 = std::make_shared<GEdge>(GEdge({5120, 5120}));
-    auto gemm_2 = std::make_shared<GNode>(GNode(
-        {edge_out_softmax, edge_c}, {edge_out_gemm_2}, {OperatorType::GEMM}));
-
-    auto edge_out_relu3 = std::make_shared<GEdge>(GEdge({5120, 5120}));
-    auto relu_3 = std::make_shared<GNode>(
-        GNode({edge_out_gemm_2}, {edge_out_relu3}, {OperatorType::RELU}));
-
-    auto graph = std::make_shared<Graph>(
-        Graph({relu1, gemm, relu2, softmax, gemm_2, relu_3},
-              {edge_a, edge_b, edge_c}, {edge_out_relu3}));
+    auto graph = std::make_shared<Graph>(Graph(
+        {relu1, gemm, relu2, softmax}, {edge_a, edge_b}, {edge_out_softmax}));
     graph->connect();
 
     auto gemm_relu_fusion = std::make_shared<GemmReluFusion>(graph);
 
     gemm_relu_fusion->create_subgraphs();
     gemm_relu_fusion->match_and_fuse_subgraph();
+
+    auto ordered_ops = graph->topoSort();
+
+    ASSERT(ordered_ops.size() == 3, "Graph node size is not 3");
+    ASSERT(ordered_ops[0]->getOperatorType() == OperatorType::RELU,
+           "Graph node type is not RELU");
+    ASSERT(ordered_ops[1]->getOperatorType() == OperatorType::GEMM_RELU,
+           "Graph node type is not GEMM_RELU");
+    ASSERT(ordered_ops[2]->getOperatorType() == OperatorType::SOFTMAX,
+           "Graph node type is not SOFTMAX");
+
+    fmt::println("SubGraph Match test passed!");
 
     return 0;
 }

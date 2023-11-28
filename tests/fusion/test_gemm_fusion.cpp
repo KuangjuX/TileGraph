@@ -3,14 +3,14 @@
 #include "core/graph/graph_base.hpp"
 #include "core/graph/gnode.hpp"
 #include "core/graph/gedge.hpp"
-#include "optimizer/fusion/graph_fusion_base.hpp"
-#include "optimizer/fusion/graph_gemm_fusion.hpp"
+#include "optimizer/fusion/subgraph_fusion/gemm_relu_fusion.hpp"
 
 #include <gtest/gtest.h>
 
 using namespace tilegraph;
-using namespace tilegraph::fusion;
 using namespace tilegraph::graph;
+using namespace tilegraph::fusion;
+using namespace tilegraph::fusion::subgraph;
 
 TEST(Fusion, gemm_relu) {
     auto edge_a = std::make_shared<GEdge>(GEdge({5120, 5120}));
@@ -27,8 +27,10 @@ TEST(Fusion, gemm_relu) {
         Graph({gemm, relu}, {edge_a, edge_b}, {edge_out_relu}));
     graph->connect();
 
-    auto gemm_fusion = std::make_shared<GemmFusion>();
-    gemm_fusion->fusion(graph);
+    auto gemm_relu_fusion = std::make_shared<GemmReluFusion>(graph);
+
+    gemm_relu_fusion->create_subgraphs();
+    gemm_relu_fusion->match_and_fuse_subgraph();
 
     auto ordered_ops = graph->topoSort();
     EXPECT_EQ(ordered_ops.size(), 1);
@@ -55,8 +57,10 @@ TEST(Fusion, gemm_relu_softmax) {
         Graph({gemm, relu, softmax}, {edge_a, edge_b}, {edge_out_softmax}));
     graph->connect();
 
-    auto gemm_fusion = std::make_shared<GemmFusion>();
-    gemm_fusion->fusion(graph);
+    auto gemm_relu_fusion = std::make_shared<GemmReluFusion>(graph);
+
+    gemm_relu_fusion->create_subgraphs();
+    gemm_relu_fusion->match_and_fuse_subgraph();
 
     auto ordered_ops = graph->topoSort();
     EXPECT_EQ(ordered_ops.size(), 2);
@@ -88,8 +92,10 @@ TEST(Fusion, relu_gemm_relu_softmax) {
         {relu1, gemm, relu2, softmax}, {edge_a, edge_b}, {edge_out_softmax}));
     graph->connect();
 
-    auto gemm_fusion = std::make_shared<GemmFusion>();
-    gemm_fusion->fusion(graph);
+    auto gemm_relu_fusion = std::make_shared<GemmReluFusion>(graph);
+
+    gemm_relu_fusion->create_subgraphs();
+    gemm_relu_fusion->match_and_fuse_subgraph();
 
     auto ordered_ops = graph->topoSort();
     ASSERT_EQ(ordered_ops.size(), 3);

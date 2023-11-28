@@ -2,12 +2,15 @@
 #include "core/type.hpp"
 #include "core/operators/elementwise.hpp"
 #include "core/operators/gemm.hpp"
-#include "optimizer/fusion/graph_fusion_base.hpp"
-#include "optimizer/fusion/graph_gemm_fusion.hpp"
+#include "optimizer/fusion/subgraph_fusion/gemm_relu_fusion.hpp"
+#include "common/common.h"
 #include <fmtlog.h>
+#include <fmt/core.h>
 
-using namespace tilegraph::fusion;
 using namespace tilegraph;
+using namespace tilegraph::graph;
+using namespace tilegraph::fusion;
+using namespace tilegraph::fusion::subgraph;
 
 int main() {
     fmtlog::setLogLevel(fmtlog::LogLevel::INF);
@@ -34,8 +37,20 @@ int main() {
         {relu1, gemm, relu2, softmax}, {edge_a, edge_b}, {edge_out_softmax}));
     graph->connect();
 
-    auto gemm_fusion = std::make_shared<GemmFusion>();
-    gemm_fusion->fusion(graph);
+    auto gemm_relu_fusion = std::make_shared<GemmReluFusion>(graph);
+
+    gemm_relu_fusion->create_subgraphs();
+    gemm_relu_fusion->match_and_fuse_subgraph();
 
     auto ordered_ops = graph->topoSort();
+
+    ASSERT(ordered_ops.size() == 3, "Graph node size is not 3");
+    ASSERT(ordered_ops[0]->getOperatorType() == OperatorType::RELU,
+           "Graph node type is not RELU");
+    ASSERT(ordered_ops[1]->getOperatorType() == OperatorType::GEMM_RELU,
+           "Graph node type is not GEMM_RELU");
+    ASSERT(ordered_ops[2]->getOperatorType() == OperatorType::SOFTMAX,
+           "Graph node type is not SOFTMAX");
+
+    fmt::println("Fuse test passed!");
 }
