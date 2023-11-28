@@ -66,6 +66,7 @@ function(build_test files)
 endfunction()
 
 if(BUILD_TEST)
+    build_test(tests/operators/*.cpp)
     build_test(tests/graph/*.cpp)
     build_test(tests/fusion/*.cpp)
     build_test(tests/codegen/*.cpp)

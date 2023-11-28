@@ -1,17 +1,17 @@
-// #pragma once
-// #include "core/graph/graph.hpp"
+#pragma once
+#include "core/graph/graph.hpp"
+#include "core/operators/operator.hpp"
 
-// namespace tilegraph::operators {
-//     using namespace tilegraph::graph;
+namespace tilegraph::operators {
 
-//     class Gemm : public Node {
-//        public:
-//         // Constructor
-//         Gemm(std::vector<Data *> inputs_list = {},
-//              std::vector<Data *> outputs_list = {}, std::string name_value =
-//              "", int64_t outputs_num_value = 1);
-//         // Destructor
-//         ~Gemm() = default;
-//     };
+    class GEMM : public Operator {
+       public:
+        GEMM() {}
+        ~GEMM() = default;
+        virtual std::vector<Tensor::Pointer> inferShape(
+            std::vector<Tensor::Pointer> inputs) override;
+        virtual std::vector<graph::GEdge::Pointer> inferShape(
+            std::vector<graph::GEdge::Pointer> inputs) override;
+    };
 
-// }  // namespace tilegraph::operators
+}  // namespace tilegraph::operators
