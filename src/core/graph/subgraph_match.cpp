@@ -141,14 +141,14 @@ void SubGraphMatch::SearchPattern(
 
             for (auto sub_node : sub_nodes) {
                 if (sub_node->getOperatorType() == description_ops[idx]) {
-                    logi("Find Pattern: {}",
+                    logi("[SubGraphMatch::SearchPattern] Find Pattern: {}",
                          toString(sub_node->getOperatorType()));
                     pattern_nodes.push_back(sub_node);
                     SearchPattern(sub_node, description_idx, idx + 1,
                                   pattern_records, pattern_nodes, pattern);
                     pattern_nodes.pop_back();
                 } else {
-                    logi("Not Find Pattern: {}",
+                    loge("[SubGraphMatch::SearchPattern] Not Find Pattern: {}",
                          toString(sub_node->getOperatorType()));
                 }
             }

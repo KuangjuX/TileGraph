@@ -12,14 +12,14 @@ namespace tilegraph::graph {
                          std::string name_value)
         : name(name_value),
           index(graph_count++),
-          operators(operators_list),
+          nodes(operators_list),
           inputs(inputs_list),
           outputs(outputs_list) {
         name = (name == "" ? "Graph_" + std::to_string(index) : name);
     }
 
     void GraphBase::connect() {
-        for (auto node : operators) {
+        for (auto node : nodes) {
             auto outputs = node->getOutputs();
             if (outputs.empty()) {
                 if (node->inferShape().isErr()) {
@@ -51,10 +51,9 @@ namespace tilegraph::graph {
             return false;
         }
         // Remove node form operators.
-        auto operators_iter =
-            std::find(operators.begin(), operators.end(), node);
-        if (operators_iter != operators.end()) {
-            operators.erase(operators_iter);
+        auto operators_iter = std::find(nodes.begin(), nodes.end(), node);
+        if (operators_iter != nodes.end()) {
+            nodes.erase(operators_iter);
             return true;
         }
 
@@ -88,7 +87,7 @@ namespace tilegraph::graph {
             node->in_degree += input->producer == NULL ? 0 : 1;
         }
 
-        operators.push_back(node);
+        nodes.push_back(node);
         return true;
     }
 
@@ -132,9 +131,8 @@ namespace tilegraph::graph {
 
     std::vector<std::shared_ptr<GNode>> GraphBase::topoSort() {
         std::unordered_map<std::shared_ptr<GNode>, int64_t> operators_indegree;
-        for (auto op : operators) {
+        for (auto op : nodes) {
             operators_indegree[op] = op->in_degree;
-            // logi("op->indegree: {}, name: {}", op->indegree, op->name);
         }
         std::vector<std::shared_ptr<GNode>> result;
         while (!operators_indegree.empty()) {

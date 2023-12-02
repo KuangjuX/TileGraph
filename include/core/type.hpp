@@ -50,8 +50,13 @@ namespace tilegraph {
         GEMM,
         SOFTMAX,
 
-        GEMM_RELU
+        GEMM_RELU,
+
+        FUSED
     };
+
+    enum class MemoryType { Register, Shared, Global };
+
     // KernelType
     enum class KernelType {
         BINARY,

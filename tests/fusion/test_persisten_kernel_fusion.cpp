@@ -8,13 +8,14 @@
 #include "common/common.hpp"
 
 #include <fmtlog.h>
+#include <gtest/gtest.h>
 
 using namespace tilegraph;
 using namespace tilegraph::fusion;
 using namespace tilegraph::graph;
 using namespace tilegraph::fusion::subgraph;
 
-int main() {
+TEST(PersistentKernelFusion, persistent_kernel_fusion_1) {
     // GEMM -> GEMM -> SOFTMAX -> GEMM
     auto edge_a = std::make_shared<GEdge>(GEdge({5120, 5120}));
     auto edge_b = std::make_shared<GEdge>(GEdge({5120, 5120}));
@@ -45,13 +46,8 @@ int main() {
 
     auto ordered_ops = graph->topoSort();
 
-    ASSERT(ordered_ops.size() == 3, "Graph node size unmatched");
-    ASSERT(ordered_ops[0]->getOperatorType() == OperatorType::FUSED,
-           "Graph node type unmatched");
-    ASSERT(ordered_ops[1]->getOperatorType() == OperatorType::SOFTMAX,
-           "Graph node type unmatched");
-    ASSERT(ordered_ops[2]->getOperatorType() == OperatorType::GEMM,
-           "Graph node type unmatched");
-
-    fmt::println("Persistent Kernel Fusion test passed!");
+    ASSERT_EQ(ordered_ops.size(), 3);
+    ASSERT_EQ(ordered_ops[0]->getOperatorType(), OperatorType::FUSED);
+    ASSERT_EQ(ordered_ops[1]->getOperatorType(), OperatorType::SOFTMAX);
+    ASSERT_EQ(ordered_ops[2]->getOperatorType(), OperatorType::GEMM);
 }

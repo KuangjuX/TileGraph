@@ -1,16 +1,14 @@
 #pragma once
 #include "core/operators/operator.hpp"
-#include "core/type.hpp"
 
 namespace tilegraph::operators {
-
-    class Binary : public Operator {
+    class FusedOp : public Operator {
        public:
-        Binary(OperatorType type);
-        ~Binary() = default;
+        FusedOp(std::vector<Operator::OpBox> ops = {});
+        ~FusedOp() = default;
         virtual std::vector<Tensor::Pointer> inferShape(
             std::vector<Tensor::Pointer> inputs) override;
 
-        OperatorType binary_type;
+        std::vector<Operator::OpBox> ops;
     };
 }  // namespace tilegraph::operators

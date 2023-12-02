@@ -4,6 +4,7 @@
 #include "core/operators/gemm.hpp"
 #include "core/operators/binary.hpp"
 #include "core/operators/unary.hpp"
+#include "core/operators/fused.hpp"
 
 #include <algorithm>
 #include <fmtlog.h>
@@ -47,6 +48,9 @@ namespace tilegraph::graph {
                 case OperatorType::MUL:
                 case OperatorType::DIV:
                     this->op = std::make_shared<Binary>(op_type);
+                    break;
+                case OperatorType::FUSED:
+                    this->op = std::make_shared<FusedOp>();
                     break;
                 default:
                     loge("[GNode::GNode] Operator type is not supported.");

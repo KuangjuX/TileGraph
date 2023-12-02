@@ -13,7 +13,7 @@ namespace tilegraph::graph {
        public:
         std::string name;
         const int64_t index;
-        std::vector<std::shared_ptr<GNode>> operators;
+        std::vector<std::shared_ptr<GNode>> nodes;
         std::vector<std::shared_ptr<GEdge>> inputs;
         std::vector<std::shared_ptr<GEdge>> outputs;
         std::vector<std::shared_ptr<GEdge>> inter_edges;

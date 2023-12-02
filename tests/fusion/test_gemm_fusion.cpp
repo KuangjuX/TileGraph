@@ -12,7 +12,7 @@ using namespace tilegraph::graph;
 using namespace tilegraph::fusion;
 using namespace tilegraph::fusion::subgraph;
 
-TEST(Fusion, gemm_relu) {
+TEST(GemmFusion, gemm_relu) {
     auto edge_a = std::make_shared<GEdge>(GEdge({5120, 5120}));
     auto edge_b = std::make_shared<GEdge>(GEdge({5120, 5120}));
     auto edge_out_gemm = std::make_shared<GEdge>(GEdge({5120, 5120}));
@@ -37,7 +37,7 @@ TEST(Fusion, gemm_relu) {
     EXPECT_EQ(ordered_ops[0]->getOperatorType(), OperatorType::GEMM_RELU);
 }
 
-TEST(Fusion, gemm_relu_softmax) {
+TEST(GemmFusion, gemm_relu_softmax) {
     // GEMM -> Relu -> Softmax
     auto edge_a = std::make_shared<GEdge>(GEdge({5120, 5120}));
     auto edge_b = std::make_shared<GEdge>(GEdge({5120, 5120}));
