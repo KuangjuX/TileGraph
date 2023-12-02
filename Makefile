@@ -1,3 +1,5 @@
+CUDA ?= OFF
+
 CC := g++
 EXAMPLE := persistent_kernel_fusion
 EXAMPLE_SRCS := $(wildcard examples/*.cpp)
@@ -7,9 +9,11 @@ LD_FLAGS := -Lbuild/ -ltilegraph -Wl,-rpath=build/
 INC_FLAGS := -Iinclude -I3rd-party/result -I3rd-party/fmt/include -I3rd-party/fmtlog
 MACRO_FLAGS := -DFMTLOG_HEADER_ONLY -DFMT_HEADER_ONLY
 
+CMAKE_OPTS	= -DUSE_CUDA=$(CUDA)
+
 build:
 	@mkdir build
-	@cd build && cmake .. && make -j8
+	@cd build && cmake $(CMAKE_OPTS) .. && make -j8
 
 test: build
 	@cd build && make test

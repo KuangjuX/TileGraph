@@ -1,4 +1,4 @@
-name: Build And Examples CI
+name: Build And Test CI
 on:
   push:
     paths-ignore:
@@ -28,7 +28,10 @@ jobs:
         cd 3rd-party/fmt && mkdir build && cd build && cmake -DCMAKE_POSITION_INDEPENDENT_CODE=TRUE .. && make
 
     - name: build
-      run: make build
+      run: make build CUDA=OFF
 
     - name: examples
       run: make examples
+
+    - name: test
+      run: make test
