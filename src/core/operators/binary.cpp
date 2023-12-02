@@ -3,7 +3,7 @@
 
 namespace tilegraph::operators {
 
-    Binary::Binary(BinaryType type) : binary_type(type) {}
+    Binary::Binary(OperatorType type) : binary_type(type) {}
 
     std::vector<Tensor::Pointer> Binary::inferShape(
         std::vector<Tensor::Pointer> inputs) {

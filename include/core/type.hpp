@@ -28,6 +28,7 @@ namespace tilegraph {
         XOR,
         FLOORMOD,
         FLOORDIV,
+
         // Unary
         SIGMOID,
         RELU,

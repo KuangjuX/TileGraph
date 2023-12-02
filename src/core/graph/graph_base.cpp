@@ -21,16 +21,11 @@ namespace tilegraph::graph {
     void GraphBase::connect() {
         for (auto node : operators) {
             auto outputs = node.get()->getOutputs();
-            auto outputs_num = node.get()->outputs_num;
             if (outputs.empty()) {
-                std::shared_ptr<Tensor> inter_edge;
-                for (auto i = 0; i < outputs_num; ++i) {
-                    inter_edge = std::make_shared<Tensor>(
-                        inputs[0].get()->getTensor().get()->tensor_dimension,
-                        inputs[0].get()->getTensor().get()->name,
-                        inputs[0].get()->getTensor().get()->tensor_datatype,
-                        inputs[0].get()->getTensor().get()->tensor_type);
-                    outputs.push_back(std::make_shared<GEdge>(inter_edge));
+                if (node->inferShape().isErr()) {
+                    loge("[GraphBase::connect] Failed to infer node shape.");
+                } else {
+                    outputs = node->inferShape().unwrap();
                 }
             }
             for (auto edge : node.get()->inputs) {
@@ -47,16 +42,6 @@ namespace tilegraph::graph {
             for (auto it : node.get()->inputs) {
                 node->in_degree += it->producer == NULL ? 0 : 1;
             }
-
-            // print node info
-            // fmt::print(
-            //     "node->name: {}, node->indegree: {}, node->outputs_num:
-            //     {}\n", node.get()->name, node.get()->indegree,
-            //     node.get()->outputs_num);
-            // logi("connect: node->name: {}, node->indegree: {},
-            // node->outputs_num: {}",
-            //      node.get()->name, node.get()->indegree,
-            //      node.get()->outputs_num
         }
     }
 

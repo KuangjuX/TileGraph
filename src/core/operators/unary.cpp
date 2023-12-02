@@ -3,7 +3,7 @@
 
 namespace tilegraph::operators {
 
-    Unary::Unary(UnaryType type) : type(type) {}
+    Unary::Unary(OperatorType type) : type(type) {}
 
     std::vector<Tensor::Pointer> Unary::inferShape(
         std::vector<Tensor::Pointer> inputs) {
