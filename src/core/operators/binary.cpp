@@ -8,7 +8,7 @@ namespace tilegraph::operators {
     std::vector<Tensor::Pointer> Binary::inferShape(
         std::vector<Tensor::Pointer> inputs) {
         ASSERT(inputs.size() == 2, "Binary operator should have 2 inputs");
-        return inputs;
+        return {inputs[0]};
     }
 
 }  // namespace tilegraph::operators

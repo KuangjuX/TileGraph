@@ -20,15 +20,15 @@ namespace tilegraph::graph {
 
     void GraphBase::connect() {
         for (auto node : operators) {
-            auto outputs = node.get()->getOutputs();
+            auto outputs = node->getOutputs();
             if (outputs.empty()) {
                 if (node->inferShape().isErr()) {
                     loge("[GraphBase::connect] Failed to infer node shape.");
                 } else {
-                    outputs = node->inferShape().unwrap();
+                    node->outputs = node->inferShape().unwrap();
                 }
             }
-            for (auto edge : node.get()->inputs) {
+            for (auto edge : node->inputs) {
                 auto it = edge.get();
                 it->addConsumer(node);
                 if (it->producer != NULL) {

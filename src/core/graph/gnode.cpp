@@ -47,9 +47,18 @@ namespace tilegraph::graph {
                 case OperatorType::MUL:
                 case OperatorType::DIV:
                     this->op = std::make_shared<Binary>(op_type);
+                    break;
                 default:
                     loge("[GNode::GNode] Operator type is not supported.");
                     break;
+            }
+        }
+
+        if (outputs.empty()) {
+            if (this->inferShape().isErr()) {
+                loge("[GNode::GNode] Failed to infer node shape.");
+            } else {
+                this->outputs = this->inferShape().unwrap();
             }
         }
     }
