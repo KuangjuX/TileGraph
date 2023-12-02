@@ -45,7 +45,7 @@ namespace tilegraph::graph {
                 it->setProducer(node);
             }
             for (auto it : node.get()->inputs) {
-                node.get()->indegree += it->producer == NULL ? 0 : 1;
+                node->in_degree += it->producer == NULL ? 0 : 1;
             }
 
             // print node info
@@ -100,7 +100,7 @@ namespace tilegraph::graph {
         }
 
         for (auto input : input_edges) {
-            node->indegree += input->producer == NULL ? 0 : 1;
+            node->in_degree += input->producer == NULL ? 0 : 1;
         }
 
         operators.push_back(node);
@@ -148,7 +148,7 @@ namespace tilegraph::graph {
     std::vector<std::shared_ptr<GNode>> GraphBase::topoSort() {
         std::unordered_map<std::shared_ptr<GNode>, int64_t> operators_indegree;
         for (auto op : operators) {
-            operators_indegree[op] = op->indegree;
+            operators_indegree[op] = op->in_degree;
             // logi("op->indegree: {}, name: {}", op->indegree, op->name);
         }
         std::vector<std::shared_ptr<GNode>> result;
@@ -170,7 +170,7 @@ namespace tilegraph::graph {
 
     bool GraphBase::fuseNode(std::vector<std::shared_ptr<GNode>> old_nodes,
                              std::shared_ptr<GNode> subgraph_node) {
-        subgraph_node->indegree = 0;
+        subgraph_node->in_degree = 0;
         subgraph_node->predecessors.clear();
         subgraph_node->successors.clear();
 

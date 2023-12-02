@@ -116,7 +116,7 @@ namespace tilegraph::graph {
     struct SubGraphRecord {
        public:
         SubGraphRecord(std::shared_ptr<GNode> sn, SubGraph::Pointer sg)
-            : starting_node(sn), subgraph(sg) {}
+            : subgraph(sg), starting_node(sn) {}
 
         bool is_valid() {
             if (subgraph == nullptr || pattern_records.empty()) return false;

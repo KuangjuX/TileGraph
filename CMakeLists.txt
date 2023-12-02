@@ -33,6 +33,7 @@ if(BUILD_TEST)
 endif()
 
 add_compile_options(-Wall)
+add_compile_options(-Werror)
 
 enable_testing()
 

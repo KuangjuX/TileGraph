@@ -9,12 +9,13 @@ namespace tilegraph::graph {
 
     GNode::GNode(std::vector<std::shared_ptr<GEdge>> inputs_list,
                  std::vector<std::shared_ptr<GEdge>> outputs_list,
-                 OperatorType op_type, std::string name_value,
-                 int64_t outputs_num_value)
+                 OperatorType op_type, std::shared_ptr<Operator::OpBox> op,
+                 std::string name_value, int64_t outputs_num_value)
         : name(name_value),
           index(node_count++),
-          indegree(0),
+          in_degree(0),
           op_type(op_type),
+          op(op),
           outputs_num(outputs_num_value),
           inputs(inputs_list),
           outputs(outputs_list) {

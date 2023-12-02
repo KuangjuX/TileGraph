@@ -62,6 +62,8 @@ namespace tilegraph::fusion {
                      toString(node->getOperatorType()));
             }
         }
+
+        return true;
     }
 
     std::size_t PersistentKernelFusion::find_root(

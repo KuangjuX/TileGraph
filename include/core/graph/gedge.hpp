@@ -13,8 +13,8 @@ namespace tilegraph::graph {
         static int64_t edge_count;
 
        public:
-        std::string name;
         const int64_t index;
+        std::string name;
         std::shared_ptr<GNode> producer;
         std::vector<std::shared_ptr<GNode>> consumers;
         std::shared_ptr<Tensor> tensor;
