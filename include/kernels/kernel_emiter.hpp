@@ -4,7 +4,7 @@
 #include "core/graph/gnode.hpp"
 #include "core/tensor.hpp"
 
-namespace tilegraph::kernels {
+namespace tilegraph::kernel {
     class KernelEmiter {
        public:
         std::shared_ptr<graph::GNode> op;

@@ -32,7 +32,7 @@ make examples
 
 ## Reference Projects
 
-- [InfiniTensor/Refactor](https://github.com/InfiniTensor/RefactorGraph): 分层解耦的深度学习推理引擎
+- [InfiniTensor/RefactorGraph](https://github.com/InfiniTensor/RefactorGraph): 分层解耦的深度学习推理引擎
 - [microsoft/nnfusion](https://github.com/microsoft/nnfusion): A flexible and efficient deep neural network (DNN) compiler that generates high-performance executable from a DNN model description.
 
 ## Reference Papers

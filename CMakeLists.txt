@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.17)
-project(InfiniTensor C CXX)
+project(TileGraph C CXX)
 
 option(USE_CUDA "Support CUDA GPU" OFF)
 option(USE_BANG "Support BANG MLU" OFF)
