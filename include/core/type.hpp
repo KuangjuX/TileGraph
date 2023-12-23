@@ -55,7 +55,8 @@ namespace tilegraph {
         FUSED
     };
 
-    enum class MemoryType { Register, Shared, Global };
+    // enum class MemoryType { Register, Warp, Shared, Global };
+    enum class MemoryType { Register, Warp, Shared, Global };
 
     // KernelType
     enum class KernelType {

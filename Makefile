@@ -1,7 +1,7 @@
 CUDA ?= OFF
 
 CC := g++
-EXAMPLE := persistent_kernel_fusion
+EXAMPLE := gemm_kernel
 EXAMPLE_SRCS := $(wildcard examples/*.cpp)
 EXAMPLES := $(patsubst examples/%.cpp, %, $(EXAMPLE_SRCS))
 

@@ -13,7 +13,6 @@
                 "${workspaceFolder}/3rd-party/googletest/googlemock/include",
                 "${workspaceFolder}/3rd-party/result",
             ],
-            "version": 4,
             "intelliSenseMode": "linux-gcc-x64",
             "compilerPath": "/usr/bin/gcc",
             "cStandard": "c17",

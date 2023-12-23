@@ -46,6 +46,8 @@ file(GLOB_RECURSE SOURCE
   srs/optimizer/fusion/subgraph_fusion/*.cpp
   src/optimizer/tilling/*.cpp
   src/codegen/*.cpp
+  src/kernels/*.cpp
+  src/kernel/cuda/*.cpp
 )
 
 add_library(tilegraph SHARED ${SOURCE})
