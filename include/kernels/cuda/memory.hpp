@@ -4,7 +4,7 @@
 #include <string>
 namespace tilegraph::kernel::cuda {
     std::string declareMemory(int indient, std::string name,
-                              MemoryType mem_type, TensorDatatype data_type,
+                              MemoryType mem_type, DataType data_type,
                               uint32_t len) {
         std::string memory_declare;
 
@@ -31,20 +31,14 @@ namespace tilegraph::kernel::cuda {
         memory_declare += " ";
 
         switch (data_type) {
-            case TensorDatatype::DOUBLE:
-                memory_declare += "double";
-                break;
-            case TensorDatatype::FLOAT:
+            case DataType::Float:
                 memory_declare += "float";
                 break;
-            case TensorDatatype::HALF:
+            case DataType::Half:
                 memory_declare += "half";
                 break;
-            case TensorDatatype::INT32:
-                memory_declare += "int";
-                break;
             default:
-                fmt::println("Failed to get data type");
+                fmt::println("[declareMemory] Invalid data type.");
         }
         memory_declare += " ";
         memory_declare += name;

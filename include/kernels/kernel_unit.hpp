@@ -1,7 +1,7 @@
 #pragma once
 #include <string>
 namespace tilegraph::kernel {
-    // class KernelUnit {};
+    class KernelUnit {};
 
     std::string insertIndient(int indient) {
         std::string res;

@@ -58,6 +58,10 @@ namespace tilegraph {
     // enum class MemoryType { Register, Warp, Shared, Global };
     enum class MemoryType { Register, Warp, Shared, Global };
 
+    enum class FuncType { Device, Global, Host };
+
+    enum class DataType { Void, Half, Float, Int32 };
+
     // KernelType
     enum class KernelType {
         BINARY,

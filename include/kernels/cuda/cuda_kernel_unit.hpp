@@ -1,3 +1,4 @@
+#pragma once
 #include "kernels/kernel_unit.hpp"
 #include "kernels/cuda/header.hpp"
 #include <set>
