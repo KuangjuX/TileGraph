@@ -94,7 +94,7 @@ namespace tilegraph::kernel::cuda {
 
         // accum.initVar(indient);
 
-        auto iter_k = std::make_unique<Iteration>(
+        auto iter_k = std::make_unique<CudaIteration>(
             std::make_unique<CudaVar>(MemoryType::Shared, DataType::Int32, 0,
                                       "ki"),
             std::variant<int, std::shared_ptr<CudaVar>>(1),
@@ -106,14 +106,14 @@ namespace tilegraph::kernel::cuda {
         // TODO: load sharded memory
         function += insertSyncnorize(indient, MemoryType::Shared);
 
-        auto iter_m = std::make_unique<Iteration>(
+        auto iter_m = std::make_unique<CudaIteration>(
             std::make_unique<CudaVar>(MemoryType::Shared, DataType::Int32, 0,
                                       "mii"),
             std::variant<int, std::shared_ptr<CudaVar>>(1),
             std::variant<int, std::shared_ptr<CudaVar>>(0),
             std::variant<int, std::shared_ptr<CudaVar>>((int)(WarpM / WmmaM)));
 
-        auto iter_n = std::make_unique<Iteration>(
+        auto iter_n = std::make_unique<CudaIteration>(
             std::make_unique<CudaVar>(MemoryType::Shared, DataType::Int32, 0,
                                       "nii"),
             std::variant<int, std::shared_ptr<CudaVar>>(1),

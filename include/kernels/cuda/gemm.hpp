@@ -1,7 +1,7 @@
 #pragma once
 #include "kernels/cuda/function.hpp"
 #include "kernels/cuda/cuda_var.hpp"
-#include "kernels/cuda/iteration.hpp"
+#include "kernels/cuda/cuda_iteration.hpp"
 #include <memory>
 #include <set>
 
@@ -33,7 +33,7 @@ namespace tilegraph::kernel::cuda {
         std::set<std::shared_ptr<CudaVar>> vars;
         // Functions
         std::set<std::shared_ptr<CudaFunction>> functions;
-        std::set<std::unique_ptr<Iteration>> iterations;
+        std::set<std::unique_ptr<Iteration<CudaVar>>> iterations;
         // Function Unit
         std::unique_ptr<CudaFunctionKernelUnit> function_unit;
 
