@@ -54,12 +54,11 @@ namespace tilegraph::kernel::cuda {
         functions.insert(store_accum);
 
         for (auto func : functions) {
-            func->declareFunction();
+            function += func->declareFunction();
         }
 
         uint16_t indient = 0;
         std::vector<std::pair<std::string, std::string>> arguments;
-        arguments.push_back(std::make_pair("half*", "A"));
         function += function_unit->declareGlobal(name, arguments);
         function += "{\n";
         indient += 4;
@@ -95,9 +94,14 @@ namespace tilegraph::kernel::cuda {
 
         // accum.initVar(indient);
 
-        function += insertIndient(indient);
-        function +=
-            fmt::format("for (int ko = 0; ko < K / {}; ko += 1){{\n", ShardedK);
+        auto iter_k = std::make_unique<Iteration>(
+            std::make_unique<CudaVar>(MemoryType::Shared, DataType::Int32, 0,
+                                      "ki"),
+            std::variant<int, std::shared_ptr<CudaVar>>(1),
+            std::variant<int, std::shared_ptr<CudaVar>>(0),
+            std::variant<int, std::shared_ptr<CudaVar>>((int)(K / ShardedK)));
+        function += iter_k->genIter(indient);
+
         indient += 4;
         // TODO: load sharded memory
         function += insertSyncnorize(indient, MemoryType::Shared);

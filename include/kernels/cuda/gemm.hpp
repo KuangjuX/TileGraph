@@ -1,6 +1,6 @@
 #pragma once
 #include "kernels/cuda/function.hpp"
-#include "kernels/cuda/vars.hpp"
+#include "kernels/cuda/cuda_var.hpp"
 #include "kernels/cuda/iteration.hpp"
 #include <memory>
 #include <set>
@@ -25,7 +25,11 @@ namespace tilegraph::kernel::cuda {
         bool transpose_a;
         bool transpose_b;
 
+        MemoryType memory_level;
+
         // Variables
+        std::set<std::shared_ptr<CudaVar>> inputs;
+        std::set<std::shared_ptr<CudaVar>> outputs;
         std::set<std::shared_ptr<CudaVar>> vars;
         // Functions
         std::set<std::shared_ptr<CudaFunction>> functions;

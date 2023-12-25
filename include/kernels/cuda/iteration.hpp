@@ -1,5 +1,5 @@
 #pragma once
-#include "kernels/cuda/vars.hpp"
+#include "kernels/cuda/cuda_var.hpp"
 #include <variant>
 
 namespace tilegraph::kernel::cuda {

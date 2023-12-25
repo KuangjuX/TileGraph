@@ -1,13 +1,10 @@
-#include "kernels/cuda/vars.hpp"
+#include "kernels/cuda/cuda_var.hpp"
 #include "kernels/cuda/memory.hpp"
 
 namespace tilegraph::kernel::cuda {
     CudaVar::CudaVar(MemoryType memory_level, DataType data_type, uint32_t len,
                      std::string name)
-        : memory_level(memory_level),
-          data_type(data_type),
-          len(len),
-          name(name) {}
+        : Var(memory_level, data_type, len, name) {}
 
     std::string CudaVar::declareVar(int indient) {
         std::string var;
