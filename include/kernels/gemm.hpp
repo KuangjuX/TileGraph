@@ -22,5 +22,6 @@ namespace tilegraph::kernel {
         bool transpose_b;
 
         MemoryType memory_level;
+        MemoryType output_level;
     };
 }  // namespace tilegraph::kernel

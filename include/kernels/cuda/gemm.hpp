@@ -26,6 +26,7 @@ namespace tilegraph::kernel::cuda {
         bool transpose_b;
 
         MemoryType memory_level;
+        MemoryType output_level;
 
         // Variables
         std::set<std::shared_ptr<CudaVar>> inputs;
@@ -41,7 +42,8 @@ namespace tilegraph::kernel::cuda {
                        uint32_t ShardedN, uint32_t ShardedK, uint32_t WarpM,
                        uint32_t WarpN, uint32_t WarpK, uint32_t WmmaM,
                        uint32_t WmmaN, uint32_t WmmaK, bool tramspose_a,
-                       bool transpose_b);
+                       bool transpose_b, MemoryType memory_level,
+                       MemoryType output_level);
         std::string genTCGEMM(std::string name);
     };
 }  // namespace tilegraph::kernel::cuda
