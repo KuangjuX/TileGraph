@@ -1,4 +1,5 @@
 # TileGraph
+**Note: TiledKernel is no longer an active project, and the successor is [ThrillerFlow](https://github.com/TiledTensor/ThrillerFlow).**
 
 TileGraph is an experimental DNN compiler that utilizes static code generation and kernel fusion techniques.
 
